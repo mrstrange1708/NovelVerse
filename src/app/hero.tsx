@@ -5,8 +5,8 @@ import React, { useState } from "react";
 import { AuroraBackground } from "../components/ui/aurora-background";
 import { LayoutTextFlip } from "@/components/ui/layout-text-flip";
 import { ShimmerButton } from "@/components/ui/shimmer-button";
-import { div } from "motion/react-client";
-import { AnimatedThemeToggler } from '../components/ui/animated-theme-toggler'
+import { WorldMapDemo } from "./WorldMapDemo";
+import { Footer } from "@/components/ui/footer";
 import {
     Navbar,
     NavBody,
@@ -44,7 +44,7 @@ export function HeroSection() {
                     <NavbarLogo />
                     <NavItems items={navItems} />
                     <div className="flex items-center gap-4">
-                        <AnimatedThemeToggler />
+
                         <NavbarButton variant="secondary">Login</NavbarButton>
                         <NavbarButton variant="primary">Sign in</NavbarButton>
                     </div>
@@ -87,7 +87,7 @@ export function HeroSection() {
                                 variant="primary"
                                 className="w-full"
                             >
-                                Book a call
+                                Sign in
                             </NavbarButton>
                         </div>
                     </MobileNavMenu>
@@ -123,6 +123,9 @@ export function HeroSection() {
                     <ShimmerButton>Get Started</ShimmerButton>
                 </motion.div>
             </AuroraBackground>
+
+            <WorldMapDemo />
+            <Footer />
         </div>
     );
 }
