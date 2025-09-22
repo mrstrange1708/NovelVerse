@@ -1,9 +1,10 @@
 "use client";
 import React from "react";
+import Link from "next/link";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
-import { IconBrandGoogle } from "@tabler/icons-react";
+import { IconBrandGoogle, IconArrowLeft } from "@tabler/icons-react";
 
 export default function SignupFormDemo() {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -11,7 +12,13 @@ export default function SignupFormDemo() {
     console.log("Form submitted");
   };
   return (
-    <div className="shadow-input mx-auto w-full max-w-md rounded-none bg-white p-4 md:rounded-2xl md:p-8 dark:bg-black">
+    <div className="shadow-input mx-auto w-full max-w-md rounded-none bg-white p-4 md:rounded-2xl md:p-8 dark:bg-black z-100">
+      <div className="mb-2">
+        <Link href="/" aria-label="Back to home" className="inline-flex items-center gap-2 text-neutral-600 hover:text-neutral-900 dark:text-neutral-300 dark:hover:text-white">
+          <IconArrowLeft className="h-4 w-4" />
+          <span className="text-sm">Back</span>
+        </Link>
+      </div>
       <h2 className="text-xl font-bold text-neutral-800 dark:text-neutral-200">
         Welcome to NovelVerse
       </h2>
@@ -45,7 +52,7 @@ export default function SignupFormDemo() {
           className="group/btn relative block h-10 w-full rounded-md bg-gradient-to-br from-black to-neutral-600 font-medium text-white shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:bg-zinc-800 dark:from-zinc-900 dark:to-zinc-900 dark:shadow-[0px_1px_0px_0px_#27272a_inset,0px_-1px_0px_0px_#27272a_inset]"
           type="submit"
         >
-          Sign up &rarr;
+          Sign in &rarr;
           <BottomGradient />
         </button>
 
@@ -66,6 +73,14 @@ export default function SignupFormDemo() {
             <BottomGradient />
           </button>
           
+          <div className="text-center mt-4">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400">
+              Already have an account?{" "}
+              <Link href="/login" className="text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300">
+                Login here
+              </Link>
+            </p>
+          </div>
 
         </div>
       </form>

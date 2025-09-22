@@ -2,6 +2,7 @@
 
 import { motion } from "motion/react";
 import React, { useState } from "react";
+import Link from "next/link";
 import { AuroraBackground } from "../components/ui/aurora-background";
 import { LayoutTextFlip } from "@/components/ui/layout-text-flip";
 import { ShimmerButton } from "@/components/ui/shimmer-button";
@@ -44,9 +45,12 @@ export function HeroSection() {
                     <NavbarLogo />
                     <NavItems items={navItems} />
                     <div className="flex items-center gap-4">
-
-                        <NavbarButton variant="secondary">Login</NavbarButton>
-                        <NavbarButton variant="primary">Sign in</NavbarButton>
+                        <Link href="/login">
+                            <NavbarButton variant="secondary">Login</NavbarButton>
+                        </Link>
+                        <Link href="/signin">
+                            <NavbarButton variant="primary">Sign in</NavbarButton>
+                        </Link>
                     </div>
                 </NavBody>
 
@@ -75,20 +79,22 @@ export function HeroSection() {
                             </a>
                         ))}
                         <div className="flex w-full flex-col gap-4">
-                            <NavbarButton
-                                onClick={() => setIsMobileMenuOpen(false)}
-                                variant="primary"
-                                className="w-full"
-                            >
-                                Login
-                            </NavbarButton>
-                            <NavbarButton
-                                onClick={() => setIsMobileMenuOpen(false)}
-                                variant="primary"
-                                className="w-full"
-                            >
-                                Sign in
-                            </NavbarButton>
+                            <Link href="/login" onClick={() => setIsMobileMenuOpen(false)}>
+                                <NavbarButton
+                                    variant="secondary"
+                                    className="w-full"
+                                >
+                                    Login
+                                </NavbarButton>
+                            </Link>
+                            <Link href="/signin" onClick={() => setIsMobileMenuOpen(false)}>
+                                <NavbarButton
+                                    variant="primary"
+                                    className="w-full"
+                                >
+                                    Sign in
+                                </NavbarButton>
+                            </Link>
                         </div>
                     </MobileNavMenu>
                 </MobileNav>
