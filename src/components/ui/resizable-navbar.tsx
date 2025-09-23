@@ -257,13 +257,15 @@ interface NavbarButtonProps {
 
 export const NavbarButton = React.forwardRef<
   HTMLAnchorElement | HTMLButtonElement,
-  NavbarButtonProps & React.ButtonHTMLAttributes<HTMLButtonElement> & React.AnchorHTMLAttributes<HTMLAnchorElement>
+  NavbarButtonProps &
+    React.ButtonHTMLAttributes<HTMLButtonElement> &
+    React.AnchorHTMLAttributes<HTMLAnchorElement>
 >(function NavbarButton(
   { href, children, className, variant = "primary", ...props },
   ref
 ) {
   const baseStyles =
-    "px-4 py-2 rounded-md bg-white button bg-white text-black text-sm font-bold relative cursor-pointer hover:-translate-y-0.5 transition duration-200 inline-block text-center";
+    "px-4 py-2 rounded-md bg-white text-black text-sm font-bold relative cursor-pointer hover:-translate-y-0.5 transition duration-200 inline-block text-center";
 
   const variantStyles = {
     primary:
@@ -275,16 +277,16 @@ export const NavbarButton = React.forwardRef<
   };
 
   const isLink = typeof href !== "undefined";
-  const Comp = isLink ? "a" : "button";
+  const Component = isLink ? "a" : "button";
 
   return (
-    <Comp
-      ref={ref as any}
-      href={isLink ? href : undefined}
+    <Component
+
+      {...(isLink ? { href } : {})}
       className={cn(baseStyles, variantStyles[variant], className)}
       {...props}
     >
       {children}
-    </Comp>
+    </Component>
   );
 });
