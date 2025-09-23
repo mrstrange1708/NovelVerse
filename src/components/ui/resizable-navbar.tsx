@@ -248,23 +248,20 @@ export const NavbarLogo = () => {
   );
 };
 
-export const NavbarButton = ({
-  href,
-  as: Tag = "a",
-  children,
-  className,
-  variant = "primary",
-  ...props
-}: {
+interface NavbarButtonProps {
   href?: string;
-  as?: React.ElementType;
   children: React.ReactNode;
   className?: string;
   variant?: "primary" | "secondary" | "dark" | "gradient";
-} & (
-    | React.ComponentPropsWithoutRef<"a">
-    | React.ComponentPropsWithoutRef<"button">
-  )) => {
+}
+
+export const NavbarButton = React.forwardRef<
+  HTMLAnchorElement | HTMLButtonElement,
+  NavbarButtonProps & React.ButtonHTMLAttributes<HTMLButtonElement> & React.AnchorHTMLAttributes<HTMLAnchorElement>
+>(function NavbarButton(
+  { href, children, className, variant = "primary", ...props },
+  ref
+) {
   const baseStyles =
     "px-4 py-2 rounded-md bg-white button bg-white text-black text-sm font-bold relative cursor-pointer hover:-translate-y-0.5 transition duration-200 inline-block text-center";
 
@@ -277,13 +274,17 @@ export const NavbarButton = ({
       "bg-gradient-to-b from-blue-500 to-blue-700 text-white shadow-[0px_2px_0px_0px_rgba(255,255,255,0.3)_inset]",
   };
 
+  const isLink = typeof href !== "undefined";
+  const Comp = isLink ? "a" : "button";
+
   return (
-    <Tag
-      href={href || undefined}
+    <Comp
+      ref={ref as any}
+      href={isLink ? href : undefined}
       className={cn(baseStyles, variantStyles[variant], className)}
       {...props}
     >
       {children}
-    </Tag>
+    </Comp>
   );
-};
+});
