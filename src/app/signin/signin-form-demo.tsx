@@ -42,9 +42,14 @@ export default function SignupFormDemo() {
 
       // Redirect after successful signup
       router.push("/home");
-    } catch (err: any) {
-      setError(err.message || "Signup failed. Please try again.");
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError("Signup failed. Please try again.");
+      }
       console.error("Signup failed:", err);
+
     } finally {
       setIsLoading(false);
     }
