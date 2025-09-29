@@ -125,8 +125,11 @@ export function HeroSection() {
                     <div className="mt-4 text-center text-base text-neutral-600 dark:text-neutral-400">
                         Discover thousands of books, save your favorites, and enjoy a distraction-free reading space.
                     </div>
-
-                    <ShimmerButton>Get Started</ShimmerButton>
+                    <Link href="/login" onClick={() => setIsMobileMenuOpen(false)}>
+                        <ShimmerButton>
+                            Get Started
+                        </ShimmerButton>
+                    </Link>
                 </motion.div>
             </AuroraBackground>
 
