@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 import { IconBrandGoogle, IconArrowLeft } from "@tabler/icons-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useRouter } from "next/navigation";
+import { apiService } from "../../lib/api";
 
 export default function LoginFormDemo() {
   const [email, setEmail] = useState("");
@@ -14,6 +15,7 @@ export default function LoginFormDemo() {
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const { login } = useAuth();
+
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -95,6 +97,7 @@ export default function LoginFormDemo() {
           <button
             className="group/btn shadow-input relative flex h-10 w-full items-center justify-start space-x-2 rounded-md bg-gray-50 px-4 font-medium text-black dark:bg-zinc-900 dark:shadow-[0px_0px_1px_1px_#262626]"
             type="submit"
+            onClick={() => apiService.loginWithGoogle()}
           >
             <IconBrandGoogle className="h-4 w-4 text-neutral-800 dark:text-neutral-300" />
             <span className="text-sm text-neutral-700 dark:text-neutral-300">

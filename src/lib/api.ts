@@ -1,4 +1,5 @@
-const API_BASE_URL = 'http://localhost:7777';
+require("dotenv").config()
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:7777';
 
 export interface RegisterData {
     firstName: string;
@@ -80,22 +81,25 @@ class ApiService {
         });
     }
 
-    // Helper method to store token in localStorage
+    // Google OAuth login: redirect user to backend Google auth route
+    async loginWithGoogle(): Promise<void> {
+        // Simply redirect to backend /auth/google route
+        window.location.href = `${this.baseURL}/auth/google`;
+    }
+
+    // Helper methods for token management
     setToken(token: string): void {
         localStorage.setItem('authToken', token);
     }
 
-    // Helper method to get token from localStorage
     getToken(): string | null {
         return localStorage.getItem('authToken');
     }
 
-    // Helper method to remove token from localStorage
     removeToken(): void {
         localStorage.removeItem('authToken');
     }
 
-    // Check if user is authenticated
     isAuthenticated(): boolean {
         return this.getToken() !== null;
     }
