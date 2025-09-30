@@ -1,10 +1,11 @@
 "use client";
 import React from "react";
+import { BooksHero } from "./hero";
 
 export default function Home() {
   return (
     <>
-    <h1>hello this home page</h1>
+    <BooksHero />
     </>
   );
 }
