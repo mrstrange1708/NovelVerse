@@ -14,7 +14,7 @@ import {
   MobileNavToggle,
   MobileNavMenu,
 } from "@/components/ui/resizable-navbar";
-import { IconUser } from "@tabler/icons-react";
+import { IconUser } from "@tabler/icons-react"
 
 export function BooksHero() {
   const images = [
