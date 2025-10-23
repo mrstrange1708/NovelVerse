@@ -42,13 +42,11 @@ export function BooksHero() {
       <Navbar>
         {/* Desktop Navigation */}
         <NavBody className="py-0">
-          <Link href="/home">
-              <NavbarLogo />
-          </Link>
+          <NavbarLogo />
           <NavItems items={navItems} />
           <div className="flex items-center gap-4">
             <Link href="/account">
-                <IconUser size={20} /> 
+              <IconUser size={20} />
             </Link>
           </div>
         </NavBody>
@@ -56,11 +54,7 @@ export function BooksHero() {
         {/* Mobile Navigation */}
         <MobileNav>
           <MobileNavHeader>
-            <Link href="/">
-              <a>
-                <NavbarLogo />
-              </a>
-            </Link>
+            <NavbarLogo />
             <MobileNavToggle
               isOpen={isMobileMenuOpen}
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
