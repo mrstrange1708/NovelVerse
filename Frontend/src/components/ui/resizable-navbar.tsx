@@ -7,8 +7,9 @@ import {
   useScroll,
   useMotionValueEvent,
 } from "motion/react";
-import Image from "next/image";
 import React, { useRef, useState } from "react";
+import Link from "next/link";
+import Image from "next/image";
 
 
 interface NavbarProps {
@@ -232,22 +233,22 @@ export const MobileNavToggle = ({
 
 export const NavbarLogo = () => {
   return (
-    <a
-      href="#"
-      className="relative z-20 mr-4 flex items-center space-x-2 px-2 py-1 text-sm font-normal text-black"
-    >
-      <Image
-        src="/logo.png"
-        alt="logo"
-        width={50}
-        height={50}
-        priority
-      />
-      <span className="font-bold text-2xl  text-black dark:text-white">NovelVerse</span>
-    </a>
+    <Link href="/home">
+      <div className="relative z-20 mr-4 flex items-center space-x-2 px-2 py-1 text-sm font-normal text-black">
+        <Image
+          src="/logo.png"
+          alt="logo"
+          width={50}
+          height={50}
+          priority
+        />
+        <span className="font-bold text-2xl text-black dark:text-white">
+          NovelVerse
+        </span>
+      </div>
+    </Link>
   );
 };
-
 interface NavbarButtonProps {
   href?: string;
   children: React.ReactNode;
@@ -258,8 +259,8 @@ interface NavbarButtonProps {
 export const NavbarButton = React.forwardRef<
   HTMLAnchorElement | HTMLButtonElement,
   NavbarButtonProps &
-    React.ButtonHTMLAttributes<HTMLButtonElement> &
-    React.AnchorHTMLAttributes<HTMLAnchorElement>
+  React.ButtonHTMLAttributes<HTMLButtonElement> &
+  React.AnchorHTMLAttributes<HTMLAnchorElement>
 >(function NavbarButton(
   { href, children, className, variant = "primary", ...props },
   ref
