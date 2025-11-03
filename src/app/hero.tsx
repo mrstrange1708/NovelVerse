@@ -24,18 +24,18 @@ import {
 export function HeroSection() {
     const navItems = [
         {
-          name: "About",
-          link: "/about",
+            name: "About",
+            link: "/about",
         },
         {
-          name: "Features",
-          link: "/features",
+            name: "Features",
+            link: "/features",
         },
         {
-          name: "category",
-          link: "/category",
+            name: "category",
+            link: "/category",
         },
-      ];
+    ];
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     return (
         <div className="relative w-full mt-[-40px] p-0">
@@ -45,8 +45,8 @@ export function HeroSection() {
                     <NavbarLogo />
                     <NavItems items={navItems} />
                     <div className="flex items-center gap-4">
-                        <Link href="/login">
-                            <NavbarButton variant="secondary">Login</NavbarButton>
+                        <Link href="/account">
+                            <NavbarButton variant="secondary">Account</NavbarButton>
                         </Link>
                         <Link href="/signin">
                             <NavbarButton variant="primary">Sign in</NavbarButton>

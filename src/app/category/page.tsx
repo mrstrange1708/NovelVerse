@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/resizable-navbar";
 import { IconUser } from "@tabler/icons-react";
 import Link from "next/link";
-import Squares from "@/components/ui/Squares_background";
+import { useRouter } from "next/navigation";
 
 const CATEGORIES = [
   "All",
@@ -36,6 +36,7 @@ export default function Category() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const router = useRouter();
 
   const navItems = [
     { name: "About", link: "/about" },
@@ -44,6 +45,11 @@ export default function Category() {
   ];
 
   useEffect(() => {
+    if (!apiService.isAuthenticated()) {
+      router.replace("/login");
+      return;
+    }
+
     const fetchBooks = async () => {
       try {
         setLoading(true);
@@ -64,7 +70,7 @@ export default function Category() {
     };
 
     fetchBooks();
-  }, []);
+  }, [router]);
 
   useEffect(() => {
     if (selectedCategory === "All") {
@@ -85,7 +91,7 @@ export default function Category() {
 
   return (
     <div className="bg-black min-h-screen">
-      
+
       {/* Navbar */}
       <Navbar>
         <NavBody className="py-0">

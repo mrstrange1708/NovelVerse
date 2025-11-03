@@ -37,6 +37,12 @@ export default function BookDetailsPage() {
     ];
 
     useEffect(() => {
+        // Redirect to login if not authenticated
+        if (!apiService.isAuthenticated()) {
+            router.replace("/login");
+            return;
+        }
+
         const fetchBook = async () => {
             if (!id) {
                 console.error("No book ID found in URL");
@@ -63,7 +69,7 @@ export default function BookDetailsPage() {
         };
 
         fetchBook();
-    }, [id]);
+    }, [id, router]);
 
     const formatFileSize = (bytes?: number) => {
         if (!bytes) return "N/A";

@@ -13,11 +13,16 @@ import {
 } from "@/components/ui/resizable-navbar";
 import { IconUser, IconBook, IconSettings, IconLogout } from "@tabler/icons-react";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "motion/react";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/contexts/AuthContext";
+import { apiService } from "@/lib/api";
 
 export default function Account() {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const router = useRouter();
+    const { logout } = useAuth();
 
     const navItems = [
         { name: "About", link: "/about" },
@@ -32,6 +37,12 @@ export default function Account() {
         email: "john.doe@example.com",
         booksRead: 12,
     };
+
+    useEffect(() => {
+        if (!apiService.isAuthenticated()) {
+            router.replace("/login");
+        }
+    }, [router]);
 
     const recentBooks = [
         { id: "1", title: "Think Like a Monk", author: "Jay Shetty", progress: 65 },
@@ -189,13 +200,13 @@ export default function Account() {
                         transition={{ duration: 0.5, delay: 0.4 }}
                         className="mt-8 text-center"
                     >
-                        <Link
-                            href="/login"
+                        <button
+                            onClick={() => { logout(); router.replace('/login'); }}
                             className="inline-flex items-center gap-2 px-6 py-3 bg-red-500/20 hover:bg-red-500/30 text-red-300 rounded-lg transition-all"
                         >
                             <IconLogout size={18} />
                             <span>Logout</span>
-                        </Link>
+                        </button>
                     </motion.div>
                 </div>
             </div>

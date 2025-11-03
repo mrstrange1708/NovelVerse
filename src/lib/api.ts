@@ -1,3 +1,4 @@
+import axios, { AxiosInstance, AxiosError } from 'axios';
 
 const API_BASE_URL = process.env.API_BASE_URL || 'http://localhost:7777';
 
@@ -15,18 +16,16 @@ export interface LoginData {
 
 export interface AuthResponse {
     message: string;
-    token?: string;
-    user?: {
-        id: number;
-        firstName: string;
-        lastName: string;
-        email: string;
-        booksRead: number;
-    };
+    token: string;
+    user?: User;
 }
 
-export interface ApiError {
-    error: string;
+export interface User {
+    id: number;
+    firstName: string;
+    lastName: string;
+    email: string;
+    booksRead: number;
 }
 
 export interface Book {
@@ -48,149 +47,159 @@ export interface Book {
 }
 
 class ApiService {
-    private baseURL: string;
+    private api: AxiosInstance;
 
-    constructor(baseURL: string = API_BASE_URL) {
-        this.baseURL = baseURL;
-    }
-
-    private async request<T>(
-        endpoint: string,
-        options: RequestInit = {}
-    ): Promise<T> {
-        const url = `${this.baseURL}${endpoint}`;
-
-        const config: RequestInit = {
+    constructor() {
+        this.api = axios.create({
+            baseURL: API_BASE_URL,
             headers: {
                 'Content-Type': 'application/json',
-                ...options.headers,
             },
-            credentials: 'include',
-            mode: 'cors',
-            ...options,
-        };
+            withCredentials: true,
+        });
 
-        try {
-            const response = await fetch(url, config);
-            const data = await response.json();
+        // Request interceptor to add token to all requests
+        this.api.interceptors.request.use(
+            (config) => {
+                const token = this.getToken();
+                if (token) {
+                    config.headers.Authorization = `Bearer ${token}`;
+                }
+                return config;
+            },
+            (error) => Promise.reject(error)
+        );
 
-            if (!response.ok) {
-                throw new Error(data.error || `HTTP error! status: ${response.status}`);
+        // Response interceptor for error handling
+        this.api.interceptors.response.use(
+            (response) => response.data,
+            (error: AxiosError<any>) => {
+                if (error.response?.status === 401) {
+                    // Token expired or invalid, clear it
+                    this.removeToken();
+                }
+                const message = error.response?.data?.error || error.message;
+                throw new Error(message);
             }
-
-            return data;
-        } catch (error) {
-            console.error('API request failed:', error);
-            throw error;
-        }
+        );
     }
 
+    // Auth methods
     async register(data: RegisterData): Promise<AuthResponse> {
-        return this.request<AuthResponse>('/auth/register', {
-            method: 'POST',
-            body: JSON.stringify(data),
-        });
+        const response = await this.api.post('/auth/register', data) as AuthResponse;
+        return response;
     }
 
     async login(data: LoginData): Promise<AuthResponse> {
-        return this.request<AuthResponse>('/auth/login', {
-            method: 'POST',
-            body: JSON.stringify(data),
-        });
+        const response = await this.api.post('/auth/login', data) as AuthResponse;
+        if (response.token) {
+            this.setToken(response.token);
+        }
+        return response;
     }
 
-    // Google OAuth login: redirect user to backend Google auth route
-    async loginWithGoogle(): Promise<void> {
-        // Simply redirect to backend /auth/google route
-        window.location.href = `${this.baseURL}/auth/google`;
+    loginWithGoogle(): void {
+        window.location.href = `${API_BASE_URL}/auth/google`;
     }
 
-    // Helper methods for token management
+    // Handle Google OAuth callback token from URL
+    handleGoogleCallback(): boolean {
+        if (typeof window === 'undefined') return false;
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const token = urlParams.get('token');
+
+        if (token) {
+            this.setToken(token);
+            // Clean up URL by removing token parameter
+            window.history.replaceState({}, document.title, window.location.pathname);
+            return true;
+        }
+        return false;
+    }
+
+    logout(): void {
+        this.removeToken();
+    }
+
+    // Token management (with SSR safety)
     setToken(token: string): void {
-        localStorage.setItem('authToken', token);
+        if (typeof window !== 'undefined') {
+            localStorage.setItem('authToken', token);
+        }
     }
 
     getToken(): string | null {
-        return localStorage.getItem('authToken');
+        if (typeof window !== 'undefined') {
+            return localStorage.getItem('authToken');
+        }
+        return null;
     }
 
     removeToken(): void {
-        localStorage.removeItem('authToken');
+        if (typeof window !== 'undefined') {
+            localStorage.removeItem('authToken');
+        }
     }
 
     isAuthenticated(): boolean {
-        return this.getToken() !== null;
+        return !!this.getToken();
     }
 
+    // Book methods
     async getBooks(): Promise<Book[]> {
-        const response = await this.request<any>('/books', {
-            method: 'GET',
-        });
-        // Handle different response formats
-        if (Array.isArray(response)) {
-            return response;
-        } else if (response.data && Array.isArray(response.data)) {
-            return response.data;
-        } else if (response.books && Array.isArray(response.books)) {
-            return response.books;
-        }
-        return [];
+        const response = await this.api.get('/books');
+        return this.extractBooks(response);
     }
 
     async getFeaturedBooks(): Promise<Book[]> {
-        const response = await this.request<any>('/books?isFeatured=true', {
-            method: 'GET',
+        const response = await this.api.get('/books', {
+            params: { isFeatured: true }
         });
-        // Handle different response formats
-        if (Array.isArray(response)) {
-            return response;
-        } else if (response.data && Array.isArray(response.data)) {
-            return response.data;
-        } else if (response.books && Array.isArray(response.books)) {
-            return response.books;
-        }
-        return [];
+        return this.extractBooks(response);
     }
 
     async getBooksByCategory(category: string): Promise<Book[]> {
-        const response = await this.request<any>(`/books?category=${encodeURIComponent(category)}`, {
-            method: 'GET',
+        const response = await this.api.get('/books', {
+            params: { category }
         });
-        // Handle different response formats
-        if (Array.isArray(response)) {
-            return response;
-        } else if (response.data && Array.isArray(response.data)) {
-            return response.data;
-        } else if (response.books && Array.isArray(response.books)) {
-            return response.books;
-        }
-        return [];
+        return this.extractBooks(response);
     }
 
     async getBookById(id: string): Promise<Book | null> {
         try {
-            const response = await this.request<any>(`/book/${id}`, {
-                method: 'GET',
-            });
-            console.log("Raw API response:", response);
+            const response = await this.api.get(`/book/${id}`) as any;
 
-            // Handle nested response format { success: true, data: { ... } }
-            if (response.success && response.data) {
-                console.log("Extracted book data:", response.data);
-                return response.data;
-            } else if (response && typeof response === 'object' && response.id) {
-                return response;
-            } else if (response.data && typeof response.data === 'object' && response.data.id) {
-                return response.data;
-            } else if (response.book && typeof response.book === 'object' && response.book.id) {
-                return response.book;
+            // Handle different response formats
+            if (response?.success && response?.data) {
+                return response.data as Book;
             }
-            console.warn("No book data found in response:", response);
+            if (response?.id) {
+                return response as Book;
+            }
+            if (response?.book?.id) {
+                return response.book as Book;
+            }
+
             return null;
         } catch (error) {
             console.error('Error fetching book:', error);
             return null;
         }
+    }
+
+    // Helper to extract books array from various response formats
+    private extractBooks(response: any): Book[] {
+        if (Array.isArray(response)) {
+            return response;
+        }
+        if (response?.data && Array.isArray(response.data)) {
+            return response.data;
+        }
+        if (response?.books && Array.isArray(response.books)) {
+            return response.books;
+        }
+        return [];
     }
 }
 
