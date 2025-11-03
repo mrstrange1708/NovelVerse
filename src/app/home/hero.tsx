@@ -10,11 +10,12 @@ import {
   MobileNav,
   NavbarLogo,
   NavbarButton,
+  NavbarIconButton,
   MobileNavHeader,
   MobileNavToggle,
   MobileNavMenu,
 } from "@/components/ui/resizable-navbar";
-import { IconUser } from "@tabler/icons-react"
+import { User as UserIcon } from "lucide-react";
 
 export function BooksHero() {
   const images = [
@@ -45,9 +46,9 @@ export function BooksHero() {
           <NavbarLogo />
           <NavItems items={navItems} />
           <div className="flex items-center gap-4">
-            <Link href="/account">
-              <IconUser size={20} />
-            </Link>
+            <NavbarIconButton href="/account">
+              <UserIcon size={20} />
+            </NavbarIconButton>
           </div>
         </NavBody>
 

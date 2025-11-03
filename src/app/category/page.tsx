@@ -15,7 +15,7 @@ import {
   MobileNavToggle,
   MobileNavMenu,
 } from "@/components/ui/resizable-navbar";
-import { IconUser } from "@tabler/icons-react";
+import { User as UserIcon, Search, X } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
@@ -33,6 +33,7 @@ export default function Category() {
   const [books, setBooks] = useState<Book[]>([]);
   const [filteredBooks, setFilteredBooks] = useState<Book[]>([]);
   const [selectedCategory, setSelectedCategory] = useState("All");
+  const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -54,9 +55,7 @@ export default function Category() {
       try {
         setLoading(true);
         const data = await apiService.getBooks();
-        // Ensure data is an array
         const booksArray = Array.isArray(data) ? data : [];
-        console.log("Fetched books:", booksArray);
         setBooks(booksArray);
         setFilteredBooks(booksArray);
       } catch (err) {
@@ -73,25 +72,41 @@ export default function Category() {
   }, [router]);
 
   useEffect(() => {
-    if (selectedCategory === "All") {
-      setFilteredBooks(books);
-    } else {
-      const filtered = books.filter((book) => book.category === selectedCategory);
-      setFilteredBooks(filtered);
+    let filtered = books;
+
+    // Filter by category
+    if (selectedCategory !== "All") {
+      filtered = filtered.filter((book) => book.category === selectedCategory);
     }
-  }, [selectedCategory, books]);
+
+    // Filter by search query
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase();
+      filtered = filtered.filter(
+        (book) =>
+          book.title.toLowerCase().includes(query) ||
+          book.author.toLowerCase().includes(query) ||
+          book.description?.toLowerCase().includes(query)
+      );
+    }
+
+    setFilteredBooks(filtered);
+  }, [selectedCategory, searchQuery, books]);
 
   const categoryGroups = CATEGORIES.slice(1).reduce((acc, category) => {
-    const booksInCategory = books.filter((book) => book.category === category);
+    const booksInCategory = filteredBooks.filter((book) => book.category === category);
     if (booksInCategory.length > 0) {
       acc[category] = booksInCategory;
     }
     return acc;
   }, {} as Record<string, Book[]>);
 
+  const clearSearch = () => {
+    setSearchQuery("");
+  };
+
   return (
     <div className="bg-black min-h-screen">
-
       {/* Navbar */}
       <Navbar>
         <NavBody className="py-0">
@@ -99,12 +114,11 @@ export default function Category() {
           <NavItems items={navItems} />
           <div className="flex items-center gap-4">
             <Link href="/account">
-              <IconUser size={20} />
+              <UserIcon size={20} />
             </Link>
           </div>
         </NavBody>
 
-        {/* Mobile Navigation */}
         <MobileNav>
           <MobileNavHeader>
             <NavbarLogo />
@@ -133,7 +147,30 @@ export default function Category() {
       </Navbar>
 
       <div className="container mx-auto px-4 py-36">
-        <h1 className="text-5xl font-bold mb-8 text-white">Book Categories</h1>
+        {/* Header Row (Title + Search Bar) */}
+        <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
+          <h1 className="text-5xl font-bold text-white">Book Categories</h1>
+
+          {/* Search Bar */}
+          <div className="relative w-full md:w-1/2 lg:w-1/3">
+            <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+            <input
+              type="text"
+              placeholder="Search books by title, author, or description..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full pl-12 pr-12 py-3 bg-gray-900 text-white border border-gray-800 rounded-full focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+            />
+            {searchQuery && (
+              <button
+                onClick={clearSearch}
+                className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white transition-colors"
+              >
+                <X size={20} />
+              </button>
+            )}
+          </div>
+        </div>
 
         {/* Category Filters */}
         <div className="flex gap-4 mb-8 overflow-x-auto pb-4 scrollbar-hide">
@@ -142,8 +179,8 @@ export default function Category() {
               key={category}
               onClick={() => setSelectedCategory(category)}
               className={`px-6 py-2 rounded-full font-semibold transition-all duration-200 whitespace-nowrap ${selectedCategory === category
-                ? "bg-emerald-500 text-white"
-                : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                  ? "bg-emerald-500 text-white"
+                  : "bg-gray-800 text-gray-300 hover:bg-gray-700"
                 }`}
             >
               {category}
@@ -177,7 +214,7 @@ export default function Category() {
 
         {!loading && !error && (
           <>
-            {selectedCategory === "All" ? (
+            {selectedCategory === "All" && !searchQuery ? (
               <div className="flex flex-col gap-12">
                 {Object.entries(categoryGroups).map(([category, categoryBooks]) => (
                   <div key={category}>
@@ -196,16 +233,22 @@ export default function Category() {
                     </div>
                   </div>
                 ))}
+                {Object.keys(categoryGroups).length === 0 && (
+                  <p className="text-gray-400 text-lg">No books available.</p>
+                )}
               </div>
             ) : (
               <div>
                 <h2 className="text-2xl font-bold mb-6 text-white">
-                  {selectedCategory} ({filteredBooks.length})
+                  {searchQuery
+                    ? `Search Results`
+                    : `${selectedCategory} (${filteredBooks.length})`
+                  }
                 </h2>
                 {filteredBooks.length > 0 ? (
-                  <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide">
+                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
                     {filteredBooks.map((book) => (
-                      <div key={book.id} className="flex-shrink-0 w-[160px]">
+                      <div key={book.id}>
                         <BookCard
                           id={book.id}
                           title={book.title}
@@ -216,7 +259,12 @@ export default function Category() {
                     ))}
                   </div>
                 ) : (
-                  <p className="text-gray-400 text-lg">No books found in this category.</p>
+                  <p className="text-gray-400 text-lg">
+                    {searchQuery
+                      ? `No books found matching "${searchQuery}"`
+                      : "No books found in this category."
+                    }
+                  </p>
                 )}
               </div>
             )}
@@ -224,7 +272,6 @@ export default function Category() {
         )}
       </div>
 
-      {/* Footer */}
       <Footer />
     </div>
   );

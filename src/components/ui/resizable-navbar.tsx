@@ -10,6 +10,7 @@ import {
 import React, { useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { User as UserIcon } from "lucide-react";
 
 
 interface NavbarProps {
@@ -289,5 +290,35 @@ export const NavbarButton = React.forwardRef<
     >
       {children}
     </Component>
+  );
+});
+
+interface NavbarIconButtonProps {
+  href: string;
+  className?: string;
+  ariaLabel?: string;
+  children?: React.ReactNode;
+}
+
+export const NavbarIconButton = React.forwardRef<
+  HTMLAnchorElement,
+  NavbarIconButtonProps
+>(function NavbarIconButton(
+  { href, className, ariaLabel = "Account", children },
+  ref
+) {
+  return (
+    <a
+      href={href}
+      aria-label={ariaLabel}
+      className={cn(
+        "inline-flex items-center justify-center rounded-full p-2 text-neutral-700 hover:text-black dark:text-neutral-300 dark:hover:text-white transition-colors",
+        "bg-transparent hover:bg-gray-100 dark:hover:bg-neutral-800",
+        className,
+      )}
+      ref={ref as any}
+    >
+      {children ?? <UserIcon size={20} />}
+    </a>
   );
 });
