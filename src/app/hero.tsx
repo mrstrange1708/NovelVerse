@@ -46,7 +46,7 @@ export function HeroSection() {
                     <NavItems items={navItems} />
                     <div className="flex items-center gap-4">
                         <Link href="/account">
-                            <NavbarButton variant="secondary">Account</NavbarButton>
+                            <NavbarButton variant="secondary">Login</NavbarButton>
                         </Link>
                         <Link href="/signin">
                             <NavbarButton variant="primary">Sign in</NavbarButton>

@@ -1,6 +1,7 @@
-import axios, { AxiosInstance, AxiosError } from 'axios';
+import axios, { AxiosInstance, AxiosError, AxiosHeaders, InternalAxiosRequestConfig } from 'axios';
 
-const API_BASE_URL = process.env.API_BASE_URL || 'http://localhost:7777';
+// Use a public env var for client-side code (Next.js exposes NEXT_PUBLIC_*)
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || process.env.API_BASE_URL || 'http://localhost:7777';
 
 export interface RegisterData {
     firstName: string;
@@ -41,10 +42,19 @@ export interface Book {
     isFeatured: boolean;
     pageCount?: number;
     language: string;
-    readers: any[];
+    readers: unknown[];
     createdAt: string;
     updatedAt: string;
 }
+
+interface ApiError {
+    error?: string;
+    message?: string;
+}
+
+type BooksResponse = Book[] | { data?: Book[] } | { books?: Book[] };
+
+type BookByIdResponse = Book | { success?: boolean; data?: Book; book?: Book };
 
 class ApiService {
     private api: AxiosInstance;
@@ -52,63 +62,57 @@ class ApiService {
     constructor() {
         this.api = axios.create({
             baseURL: API_BASE_URL,
-            headers: {
-                'Content-Type': 'application/json',
-            },
+            headers: { 'Content-Type': 'application/json' },
             withCredentials: true,
         });
 
-        // Request interceptor to add token to all requests
+        // Attach Authorization header when token exists
         this.api.interceptors.request.use(
-            (config) => {
+            (config: InternalAxiosRequestConfig) => {
                 const token = this.getToken();
-                if (token) {
-                    config.headers.Authorization = `Bearer ${token}`;
+                if (token && config.headers) {
+                    config.headers.set('Authorization', `Bearer ${token}`);
                 }
                 return config;
             },
             (error) => Promise.reject(error)
         );
 
-        // Response interceptor for error handling
+        // Normalize API errors and auto-logout on 401
         this.api.interceptors.response.use(
             (response) => response.data,
-            (error: AxiosError<any>) => {
+            (error: AxiosError<ApiError>) => {
                 if (error.response?.status === 401) {
-                    // Token expired or invalid, clear it
                     this.removeToken();
                 }
                 const message = error.response?.data?.error || error.message;
-                throw new Error(message);
+                return Promise.reject(new Error(message));
             }
         );
     }
 
     // Auth methods
     async register(data: RegisterData): Promise<AuthResponse> {
-        const response = await this.api.post('/auth/register', data) as AuthResponse;
-        return response;
+        return this.api.post('/auth/register', data) as Promise<AuthResponse>;
     }
 
     async login(data: LoginData): Promise<AuthResponse> {
         const response = await this.api.post('/auth/login', data) as AuthResponse;
-        if (response.token) {
-            this.setToken(response.token);
-        }
+        if (response.token) this.setToken(response.token);
         return response;
     }
 
     loginWithGoogle(): void {
-        window.location.href = `${API_BASE_URL}/auth/google`;
+        if (typeof window !== 'undefined') {
+            window.location.href = `${API_BASE_URL}/auth/google`;
+        }
     }
 
     // Handle Google OAuth callback token from URL
     handleGoogleCallback(): boolean {
         if (typeof window === 'undefined') return false;
-
         const urlParams = new URLSearchParams(window.location.search);
         const token = urlParams.get('token');
-
         if (token) {
             this.setToken(token);
             // Clean up URL by removing token parameter
@@ -148,57 +152,53 @@ class ApiService {
 
     // Book methods
     async getBooks(): Promise<Book[]> {
-        const response = await this.api.get('/books');
+        const response = await this.api.get('/books') as BooksResponse;
         return this.extractBooks(response);
     }
 
     async getFeaturedBooks(): Promise<Book[]> {
         const response = await this.api.get('/books', {
-            params: { isFeatured: true }
-        });
+            params: { isFeatured: true },
+        }) as BooksResponse;
         return this.extractBooks(response);
     }
 
     async getBooksByCategory(category: string): Promise<Book[]> {
         const response = await this.api.get('/books', {
-            params: { category }
-        });
+            params: { category },
+        }) as BooksResponse;
         return this.extractBooks(response);
     }
 
     async getBookById(id: string): Promise<Book | null> {
         try {
-            const response = await this.api.get(`/book/${id}`) as any;
+            const response = await this.api.get(`/book/${id}`) as BookByIdResponse;
 
-            // Handle different response formats
-            if (response?.success && response?.data) {
-                return response.data as Book;
+            if (typeof response === 'object' && response !== null) {
+                if ('success' in response && response.success && 'data' in response && response.data) {
+                    return response.data;
+                }
+                if ('id' in response) {
+                    return response as Book;
+                }
+                if ('book' in response && response.book) {
+                    return response.book;
+                }
             }
-            if (response?.id) {
-                return response as Book;
-            }
-            if (response?.book?.id) {
-                return response.book as Book;
-            }
-
             return null;
         } catch (error) {
-            console.error('Error fetching book:', error);
+            if (process.env.NODE_ENV !== 'production') {
+                console.error('Error fetching book:', error);
+            }
             return null;
         }
     }
 
     // Helper to extract books array from various response formats
-    private extractBooks(response: any): Book[] {
-        if (Array.isArray(response)) {
-            return response;
-        }
-        if (response?.data && Array.isArray(response.data)) {
-            return response.data;
-        }
-        if (response?.books && Array.isArray(response.books)) {
-            return response.books;
-        }
+    private extractBooks(response: BooksResponse): Book[] {
+        if (Array.isArray(response)) return response;
+        if ('data' in response && Array.isArray(response.data)) return response.data;
+        if ('books' in response && Array.isArray(response.books)) return response.books;
         return [];
     }
 }

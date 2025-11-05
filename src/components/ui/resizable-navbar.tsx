@@ -197,7 +197,6 @@ export const MobileNavMenu = ({
   children,
   className,
   isOpen,
-  onClose,
 }: MobileNavMenuProps) => {
   return (
     <AnimatePresence>
@@ -264,7 +263,6 @@ export const NavbarButton = React.forwardRef<
   React.AnchorHTMLAttributes<HTMLAnchorElement>
 >(function NavbarButton(
   { href, children, className, variant = "primary", ...props },
-  ref
 ) {
   const baseStyles =
     "px-4 py-2 rounded-md bg-white text-black text-sm font-bold relative cursor-pointer hover:-translate-y-0.5 transition duration-200 inline-block text-center";
@@ -316,7 +314,7 @@ export const NavbarIconButton = React.forwardRef<
         "bg-transparent hover:bg-gray-100 dark:hover:bg-neutral-800",
         className,
       )}
-      ref={ref as any}
+      ref={ref}
     >
       {children ?? <UserIcon size={20} />}
     </a>

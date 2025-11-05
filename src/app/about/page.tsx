@@ -13,7 +13,6 @@ import {
   MobileNavMenu,
 } from "@/components/ui/resizable-navbar";
 import { User as UserIcon } from "lucide-react";
-import Link from "next/link";
 import { useState } from "react";
 import { motion } from "motion/react";
 
@@ -169,7 +168,7 @@ export default function About() {
             </p>
             <p className="text-gray-400 leading-relaxed">
               Our team of dedicated book lovers curates a diverse collection spanning from
-              timeless classics to modern bestsellers, ensuring that there's something for
+              timeless classics to modern bestsellers, ensuring that there&apos;s something for
               every reader.
             </p>
           </motion.div>
