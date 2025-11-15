@@ -1,15 +1,7 @@
 "use client";
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { apiService } from '@/lib/api';
-
-interface User {
-    id: number;
-    firstName: string;
-    lastName: string;
-    email: string;
-    booksRead: number;
-}
+import { apiService, User } from '@/lib/api';
 
 interface AuthContextType {
     user: User | null;
@@ -17,43 +9,53 @@ interface AuthContextType {
     isLoading: boolean;
     login: (email: string, password: string) => Promise<void>;
     logout: () => void;
+    setUser: (user: User) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-    const [user, setUser] = useState<User | null>(null);
+    const [user, setUserState] = useState<User | null>(null);
     const [isLoading, setIsLoading] = useState(true);
-    const [auth, setAuth] = useState<boolean>(apiService.isAuthenticated());
-
-    const isAuthenticated = auth;
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
 
     useEffect(() => {
-        // Check if user is already logged in (token exists)
+        // Load user and auth state from localStorage on mount
         const token = apiService.getToken();
-        setAuth(!!token);
+        const storedUser = apiService.getUser();
+        
+        if (token && storedUser) {
+            setUserState(storedUser);
+            setIsAuthenticated(true);
+        }
+        
         setIsLoading(false);
     }, []);
+
+    const setUser = (newUser: User) => {
+        setUserState(newUser);
+        apiService.setUser(newUser);
+    };
 
     const login = async (email: string, password: string) => {
         try {
             const response = await apiService.login({ email, password });
-            if (response.token) {
-                apiService.setToken(response.token);
-                setAuth(true);
-            }
+            console.log('Login response:', response);
+            
             if (response.user) {
-                setUser(response.user);
+                setUserState(response.user);
+                setIsAuthenticated(true);
             }
         } catch (error) {
+            console.error('Login error:', error);
             throw error;
         }
     };
 
     const logout = () => {
-        apiService.removeToken();
-        setUser(null);
-        setAuth(false);
+        apiService.logout();
+        setUserState(null);
+        setIsAuthenticated(false);
     };
 
     const value: AuthContextType = {
@@ -61,7 +63,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         isAuthenticated,
         isLoading,
         login,
-        logout
+        logout,
+        setUser
     };
 
     return (

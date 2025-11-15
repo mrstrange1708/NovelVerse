@@ -1,4 +1,4 @@
-import axios, { AxiosInstance, AxiosError, AxiosHeaders, InternalAxiosRequestConfig } from 'axios';
+import axios, { AxiosInstance, AxiosError, InternalAxiosRequestConfig } from 'axios';
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 export interface RegisterData {
@@ -25,6 +25,7 @@ export interface User {
     lastName: string;
     email: string;
     booksRead: number;
+    readBooks: Book[];
 }
 
 export interface Book {
@@ -82,6 +83,7 @@ class ApiService {
             (error: AxiosError<ApiError>) => {
                 if (error.response?.status === 401) {
                     this.removeToken();
+                    this.removeUser();
                 }
                 const message = error.response?.data?.error || error.message;
                 return Promise.reject(new Error(message));
@@ -96,8 +98,16 @@ class ApiService {
 
     async login(data: LoginData): Promise<AuthResponse> {
         const response = await this.api.post('/auth/login', data) as AuthResponse;
-        console.log(response)
-        if (response.token) this.setToken(response.token);
+        console.log(response);
+        
+        if (response.token) {
+            this.setToken(response.token);
+        }
+        
+        if (response.user) {
+            this.setUser(response.user);
+        }
+        
         return response;
     }
 
@@ -123,6 +133,7 @@ class ApiService {
 
     logout(): void {
         this.removeToken();
+        this.removeUser();
     }
 
     // Token management (with SSR safety)
@@ -142,6 +153,35 @@ class ApiService {
     removeToken(): void {
         if (typeof window !== 'undefined') {
             localStorage.removeItem('authToken');
+        }
+    }
+
+
+    setUser(user: User): void {
+        if (typeof window !== 'undefined') {
+            localStorage.setItem('user', JSON.stringify(user));
+        }
+    }
+
+    getUser(): User | null {
+        if (typeof window !== 'undefined') {
+            const userStr = localStorage.getItem('user');
+            if (userStr) {
+                try {
+                    return JSON.parse(userStr) as User;
+                } catch (error) {
+                    console.error('Failed to parse user data:', error);
+                    this.removeUser();
+                    return null;
+                }
+            }
+        }
+        return null;
+    }
+
+    removeUser(): void {
+        if (typeof window !== 'undefined') {
+            localStorage.removeItem('user');
         }
     }
 
