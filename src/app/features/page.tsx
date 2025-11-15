@@ -261,7 +261,7 @@ export default function Features() {
                 Ready to Transform Your Reading?
               </h2>
               <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
-                Join thousands of readers who've discovered their next favorite book on NovelVerse
+                Join thousands of readers who&#39;ve discovered their next favorite book on NovelVerse
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link
