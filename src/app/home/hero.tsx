@@ -16,6 +16,7 @@ import {
   MobileNavMenu,
 } from "@/components/ui/resizable-navbar";
 import { User as UserIcon } from "lucide-react";
+import { BooksSection } from "@/components/ui/books-section";
 
 export function BooksHero() {
   const images = [
@@ -45,7 +46,7 @@ export function BooksHero() {
         <NavBody className="py-0">
           <NavbarLogo />
           <NavItems items={navItems} />
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-4 z-99">
             <NavbarIconButton href="/account">
               <UserIcon size={20} />
             </NavbarIconButton>
@@ -77,12 +78,12 @@ export function BooksHero() {
               </a>
             ))}
             <div className="flex w-full flex-col gap-4">
-              <Link href="/signin" onClick={() => setIsMobileMenuOpen(false)}>
+              <Link href="/account" onClick={() => setIsMobileMenuOpen(false)}>
                 <NavbarButton
                   variant="primary"
                   className="w-full"
                 >
-                  Sign in
+                  Account
                 </NavbarButton>
               </Link>
             </div>
@@ -116,6 +117,10 @@ export function BooksHero() {
           </Link>
         </motion.div>
       </ImagesSlider>
+      <div className="container mx-auto px-8 py-12">
+        <BooksSection title="Featured Books" showFeatured={true} />
+        <BooksSection title="Popular Books" showFeatured={false} />
+      </div>
     </div>
   );
 }

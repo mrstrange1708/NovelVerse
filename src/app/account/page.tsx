@@ -10,12 +10,15 @@ import {
     MobileNavHeader,
     MobileNavToggle,
     MobileNavMenu,
+    NavbarIconButton,
+    NavbarButton,
 } from "@/components/ui/resizable-navbar";
 import { IconUser, IconBook, IconSettings, IconLogout } from "@tabler/icons-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { motion } from "motion/react";
 import { useRouter } from "next/navigation";
+import { User as UserIcon } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { apiService } from "@/lib/api";
 
@@ -60,43 +63,53 @@ export default function Account() {
         <div className="bg-black min-h-screen">
             {/* Navbar */}
             <Navbar>
-                <NavBody className="py-0">
-                    <NavbarLogo />
-                    <NavItems items={navItems} />
-                    <div className="flex items-center gap-4">
-                        <Link href="/account">
-                            <IconUser size={20} />
-                        </Link>
-                    </div>
-                </NavBody>
+        <NavBody className="py-0">
+          <NavbarLogo />
+          <NavItems items={navItems} />
+          <div className="flex items-center gap-4 z-99">
+            <NavbarIconButton href="/account">
+              <UserIcon size={20} />
+            </NavbarIconButton>
+          </div>
+        </NavBody>
 
-                {/* Mobile Navigation */}
-                <MobileNav>
-                    <MobileNavHeader>
-                        <NavbarLogo />
-                        <MobileNavToggle
-                            isOpen={isMobileMenuOpen}
-                            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                        />
-                    </MobileNavHeader>
+        {/* Mobile Navigation */}
+        <MobileNav>
+          <MobileNavHeader>
+            <NavbarLogo />
+            <MobileNavToggle
+              isOpen={isMobileMenuOpen}
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            />
+          </MobileNavHeader>
 
-                    <MobileNavMenu
-                        isOpen={isMobileMenuOpen}
-                        onClose={() => setIsMobileMenuOpen(false)}
-                    >
-                        {navItems.map((item, idx) => (
-                            <a
-                                key={`mobile-link-${idx}`}
-                                href={item.link}
-                                onClick={() => setIsMobileMenuOpen(false)}
-                                className="relative text-neutral-600 dark:text-neutral-300"
-                            >
-                                <span className="block">{item.name}</span>
-                            </a>
-                        ))}
-                    </MobileNavMenu>
-                </MobileNav>
-            </Navbar>
+          <MobileNavMenu
+            isOpen={isMobileMenuOpen}
+            onClose={() => setIsMobileMenuOpen(false)}
+          >
+            {navItems.map((item, idx) => (
+              <a
+                key={`mobile-link-${idx}`}
+                href={item.link}
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="relative text-neutral-600 dark:text-neutral-300"
+              >
+                <span className="block">{item.name}</span>
+              </a>
+            ))}
+            <div className="flex w-full flex-col gap-4">
+              <Link href="/account" onClick={() => setIsMobileMenuOpen(false)}>
+                <NavbarButton
+                  variant="primary"
+                  className="w-full"
+                >
+                  Account
+                </NavbarButton>
+              </Link>
+            </div>
+          </MobileNavMenu>
+        </MobileNav>
+      </Navbar>
 
             {/* Main Content */}
             <div className="container mx-auto px-4 md:px-8 py-12">

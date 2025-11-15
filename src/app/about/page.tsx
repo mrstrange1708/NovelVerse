@@ -11,7 +11,9 @@ import {
   MobileNavHeader,
   MobileNavToggle,
   MobileNavMenu,
+  NavbarButton
 } from "@/components/ui/resizable-navbar";
+import Link from "next/link";
 import { User as UserIcon } from "lucide-react";
 import { useState } from "react";
 import { motion } from "motion/react";
@@ -29,10 +31,11 @@ export default function About() {
     <div className="bg-black min-h-screen">
       {/* Navbar */}
       <Navbar>
+        {/* Desktop Navigation */}
         <NavBody className="py-0">
           <NavbarLogo />
           <NavItems items={navItems} />
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-4 z-99">
             <NavbarIconButton href="/account">
               <UserIcon size={20} />
             </NavbarIconButton>
@@ -63,6 +66,16 @@ export default function About() {
                 <span className="block">{item.name}</span>
               </a>
             ))}
+            <div className="flex w-full flex-col gap-4">
+              <Link href="/account" onClick={() => setIsMobileMenuOpen(false)}>
+                <NavbarButton
+                  variant="primary"
+                  className="w-full"
+                >
+                  Account
+                </NavbarButton>
+              </Link>
+            </div>
           </MobileNavMenu>
         </MobileNav>
       </Navbar>
