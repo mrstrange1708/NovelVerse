@@ -13,10 +13,12 @@ import {
   MobileNavMenu,
   NavbarButton
 } from "@/components/ui/resizable-navbar";
-import { User as UserIcon } from "lucide-react";
+import { User, BookOpen, Zap, Search, Star, Globe, Smartphone, Moon, Filter, Shield } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import { motion } from "motion/react";
+import { ContainerScroll } from "@/components/ui/container-scroll-animation";
+import { BackgroundRippleEffect } from "@/components/ui/background-ripple-effect";
 
 export default function Features() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -29,54 +31,67 @@ export default function Features() {
 
   const features = [
     {
-      icon: "📚",
-      title: "Extensive Library",
-      description: "Thousands of books across multiple categories including Fiction, Self-Help, Business, Science, and more."
+      icon: BookOpen,
+      title: "Vast Digital Library",
+      description: "Access over 50,000+ curated books spanning fiction, non-fiction, self-help, business, science fiction, and academic literature.",
+      gradient: "from-cyan-500 to-blue-500"
     },
     {
-      icon: "🔍",
-      title: "Smart Search",
-      description: "Find books quickly with our intuitive search and filter system. Search by title, author, or category."
+      icon: Search,
+      title: "AI-Powered Search",
+      description: "Lightning-fast search engine with intelligent filters. Find books by title, author, genre, or even mood and reading level.",
+      gradient: "from-purple-500 to-pink-500"
     },
     {
-      icon: "⭐",
-      title: "Featured Selection",
-      description: "Discover hand-picked featured books selected by our team of literary experts."
+      icon: Star,
+      title: "Personalized Curation",
+      description: "Discover hand-picked recommendations based on your reading history. Our experts select the finest literature just for you.",
+      gradient: "from-orange-500 to-red-500"
     },
     {
-      icon: "📖",
-      title: "Read Anywhere",
-      description: "Access your books from any device, anywhere, anytime. No downloads required."
+      icon: Globe,
+      title: "Cross-Platform Sync",
+      description: "Seamlessly continue reading across all your devices. Your bookmarks and progress sync automatically in real-time.",
+      gradient: "from-teal-500 to-emerald-500"
     },
     {
-      icon: "🎯",
-      title: "Category Filtering",
-      description: "Browse books by category with our easy-to-use filter system. Find exactly what you're looking for."
+      icon: Filter,
+      title: "Advanced Filtering",
+      description: "Sophisticated category system with multi-level filters. Sort by popularity, release date, ratings, or reading time.",
+      gradient: "from-indigo-500 to-purple-500"
     },
     {
-      icon: "🆓",
-      title: "Completely Free",
-      description: "All books are free to read. No subscriptions, no credit card required, no hidden fees."
+      icon: Shield,
+      title: "Zero Commitment",
+      description: "100% free forever. No subscriptions, no trials, no credit cards. Pure unrestricted access to knowledge and entertainment.",
+      gradient: "from-cyan-500 to-teal-500"
     },
     {
-      icon: "📱",
-      title: "Responsive Design",
-      description: "Beautiful, responsive interface that works perfectly on desktop, tablet, and mobile devices."
+      icon: Smartphone,
+      title: "Mobile-First Design",
+      description: "Pixel-perfect responsive interface optimized for every screen size. Native app experience in your browser.",
+      gradient: "from-pink-500 to-rose-500"
     },
     {
-      icon: "⚡",
-      title: "Fast Loading",
-      description: "Optimized performance ensures fast page loads and smooth reading experience."
+      icon: Zap,
+      title: "Blazing Performance",
+      description: "Sub-second load times powered by edge CDN. Optimized caching ensures instant page transitions and smooth scrolling.",
+      gradient: "from-yellow-500 to-orange-500"
     },
     {
-      icon: "🌙",
-      title: "Dark Mode",
-      description: "Built-in dark mode for comfortable reading in any lighting condition."
+      icon: Moon,
+      title: "Adaptive Theming",
+      description: "Automatic dark mode with customizable reading themes. Reduce eye strain with adjustable brightness and sepia tones.",
+      gradient: "from-slate-500 to-gray-500"
     }
   ];
 
   return (
-    <div className="bg-black min-h-screen">
+    <div className="bg-black min-h-screen relative">
+      {/* Grid Background */}
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#1f1f1f_1px,transparent_1px),linear-gradient(to_bottom,#1f1f1f_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_0%,#000_70%,transparent_110%)]" />
+    
+      
       {/* Navbar */}
       <Navbar>
         <NavBody className="py-0">
@@ -84,7 +99,7 @@ export default function Features() {
           <NavItems items={navItems} />
           <div className="flex items-center gap-4 z-99">
             <NavbarIconButton href="/account">
-              <UserIcon size={20} />
+              <User size={20} />
             </NavbarIconButton>
           </div>
         </NavBody>
@@ -127,73 +142,148 @@ export default function Features() {
         </MobileNav>
       </Navbar>
 
+      {/* Container Scroll Section */}
+      <div className="pb-20 relative z-10">
+        <ContainerScroll
+          titleComponent={
+            <>
+              <h2 className="text-4xl font-semibold text-white text-center mb-4">
+                Experience the future of <br />
+                <span className="text-5xl md:text-[5rem] font-bold mt-1 leading-none bg-gradient-to-r from-cyan-400 to-teal-400 bg-clip-text text-transparent">
+                  Digital Reading
+                </span>
+              </h2>
+              <p className="text-xl text-gray-300 text-center max-w-2xl mx-auto mt-6">
+                Seamlessly browse, discover, and immerse yourself in thousands of books
+                with our intuitive and beautiful interface
+              </p>
+            </>
+          }
+        >
+          <div className="relative w-full h-full rounded-2xl overflow-hidden border border-cyan-500/20 shadow-[0_0_50px_rgba(6,182,212,0.3)]">
+            <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/10 to-teal-500/10"></div>
+            <img
+              src="https://images.unsplash.com/photo-1481627834876-b7833e8f5570?q=80&w=1400"
+              alt="NovelVerse Library Interface"
+              className="w-full h-full object-cover object-center opacity-90"
+              draggable={false}
+            />
+          </div>
+        </ContainerScroll>
+      </div>
+
+
       {/* Hero Section */}
-      <div className="container mx-auto px-4 md:px-8 py-20">
+      <div className="container mx-auto px-4 md:px-8 py-20 relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="max-w-4xl mx-auto text-center mb-16"
+          transition={{ duration: 0.6 }}
+          className="max-w-4xl mx-auto text-center mb-20"
         >
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5 }}
+            className="inline-block mb-4"
+          >
+            <span className="px-4 py-2 bg-gradient-to-r from-cyan-500/10 to-teal-500/10 border border-cyan-500/20 rounded-full text-cyan-400 text-sm font-semibold">
+              ✨ Next-Gen Reading Platform
+            </span>
+          </motion.div>
           <h1 className="text-5xl md:text-7xl font-bold text-white mb-6">
-            Powerful <span className="text-emerald-500">Features</span>
+            Powerful{" "}
+            <span className="bg-gradient-to-r from-cyan-400 via-blue-400 to-teal-400 bg-clip-text text-transparent">
+              Features
+            </span>
           </h1>
-          <p className="text-xl text-gray-400">
-            Everything you need for an amazing reading experience
+          <p className="text-xl md:text-2xl text-gray-300">
+            Built for readers who demand excellence in every detail
           </p>
         </motion.div>
 
         {/* Features Grid */}
-        <div className="max-w-6xl mx-auto">
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {features.map((feature, index) => (
-              <motion.div
-                key={feature.title}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="bg-gray-900/50 backdrop-blur border border-gray-800 rounded-lg p-6 hover:border-emerald-500/50 transition-all duration-300 hover:scale-105"
-              >
-                <div className="text-4xl mb-4">{feature.icon}</div>
-                <h3 className="text-xl font-bold text-white mb-2">{feature.title}</h3>
-                <p className="text-gray-400 leading-relaxed">{feature.description}</p>
-              </motion.div>
-            ))}
+        <div className="max-w-7xl mx-auto">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-20">
+            {features.map((feature, index) => {
+              const Icon = feature.icon;
+              return (
+                <motion.div
+                  key={feature.title}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                  className="group relative"
+                >
+                  {/* Glow Effect */}
+                  <div className={`absolute inset-0 bg-gradient-to-r ${feature.gradient} opacity-0 group-hover:opacity-10 blur-xl transition-opacity duration-500 rounded-2xl`} />
+                  
+                  {/* Card */}
+                  <div className="relative bg-slate-900/50 backdrop-blur border border-slate-800 rounded-2xl p-8 hover:border-slate-700 transition-all duration-300 h-full hover:transform hover:scale-[1.02]">
+                    {/* Icon Container */}
+                    <div className={`w-14 h-14 bg-gradient-to-r ${feature.gradient} rounded-xl flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300`}>
+                      <Icon className="w-7 h-7 text-white" />
+                    </div>
+                    
+                    {/* Content */}
+                    <h3 className="text-2xl font-bold text-white mb-3 group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-gray-300 group-hover:bg-clip-text transition-all duration-300">
+                      {feature.title}
+                    </h3>
+                    <p className="text-gray-400 leading-relaxed">
+                      {feature.description}
+                    </p>
+
+                    {/* Corner Accent */}
+                    <div className={`absolute top-0 right-0 w-20 h-20 bg-gradient-to-br ${feature.gradient} opacity-5 rounded-bl-full`} />
+                  </div>
+                </motion.div>
+              );
+            })}
           </div>
         </div>
 
         {/* CTA Section */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.5 }}
-          className="max-w-4xl mx-auto mt-16"
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="max-w-4xl mx-auto mb-20"
         >
-          <div className="bg-gradient-to-r from-emerald-500/20 to-blue-500/20 border border-emerald-500/50 rounded-lg p-8 text-center">
-            <h2 className="text-3xl font-bold text-white mb-4">
-              Ready to Start Reading?
-            </h2>
-            <p className="text-gray-400 mb-6">
-              Explore our extensive library and discover your next favorite book
-            </p>
-            <div className="flex gap-4 justify-center">
-              <Link
-                href="/category"
-                className="px-8 py-3 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg font-semibold transition-all duration-300 hover:scale-105"
-              >
-                Browse Books
-              </Link>
-              <Link
-                href="/about"
-                className="px-8 py-3 bg-gray-800 hover:bg-gray-700 text-white rounded-lg font-semibold transition-all duration-300"
-              >
-                Learn More
-              </Link>
+          <div className="relative overflow-hidden bg-gradient-to-br from-slate-900/80 to-slate-800/80 backdrop-blur border border-slate-700 rounded-3xl p-12">
+            {/* Background Elements */}
+            <div className="absolute top-0 right-0 w-72 h-72 bg-gradient-to-br from-cyan-500/20 to-blue-500/20 rounded-full blur-3xl" />
+            <div className="absolute bottom-0 left-0 w-72 h-72 bg-gradient-to-tr from-teal-500/20 to-emerald-500/20 rounded-full blur-3xl" />
+            
+            <div className="relative z-10 text-center">
+              <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
+                Ready to Transform Your Reading?
+              </h2>
+              <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
+                Join thousands of readers who've discovered their next favorite book on NovelVerse
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Link
+                  href="/category"
+                  className="group relative px-8 py-4 bg-gradient-to-r from-cyan-500 to-teal-500 hover:from-cyan-400 hover:to-teal-400 text-white rounded-xl font-semibold transition-all duration-300 hover:scale-105 hover:shadow-[0_0_30px_rgba(6,182,212,0.5)]"
+                >
+                  <span className="relative z-10">Explore Library</span>
+                  <div className="absolute inset-0 bg-gradient-to-r from-cyan-400 to-teal-400 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity blur" />
+                </Link>
+                <Link
+                  href="/about"
+                  className="px-8 py-4 bg-slate-800 hover:bg-slate-700 text-white rounded-xl font-semibold transition-all duration-300 border border-slate-700 hover:border-slate-600"
+                >
+                  Learn More
+                </Link>
+              </div>
             </div>
           </div>
         </motion.div>
       </div>
 
+      
       <Footer />
     </div>
   );

@@ -32,7 +32,7 @@ export function HeroSection() {
             link: "/features",
         },
         {
-            name: "category",
+            name: "Category",
             link: "/category",
         },
     ];
