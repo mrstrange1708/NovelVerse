@@ -1,7 +1,5 @@
 import axios, { AxiosInstance, AxiosError, AxiosHeaders, InternalAxiosRequestConfig } from 'axios';
-
-// Use a public env var for client-side code (Next.js exposes NEXT_PUBLIC_*)
-const API_BASE_URL = process.env.API_BASE_URL;
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 export interface RegisterData {
     firstName: string;
@@ -98,6 +96,7 @@ class ApiService {
 
     async login(data: LoginData): Promise<AuthResponse> {
         const response = await this.api.post('/auth/login', data) as AuthResponse;
+        console.log(response)
         if (response.token) this.setToken(response.token);
         return response;
     }
