@@ -26,7 +26,7 @@ export default function Features() {
   const navItems = [
     { name: "About", link: "/about" },
     { name: "Features", link: "/features" },
-    { name: "Category", link: "/category" },
+    { name: "Category", link: "/category" }, 
   ];
 
   const features = [
