@@ -33,56 +33,47 @@ export default function Features() {
     {
       icon: BookOpen,
       title: "Vast Digital Library",
-      description: "Access over 50,000+ curated books spanning fiction, non-fiction, self-help, business, science fiction, and academic literature.",
-      gradient: "from-cyan-500 to-blue-500"
+      description: "Access over 50,000+ curated books spanning fiction, non-fiction, self-help, business, science fiction, and academic literature."
     },
     {
       icon: Search,
       title: "AI-Powered Search",
-      description: "Lightning-fast search engine with intelligent filters. Find books by title, author, genre, or even mood and reading level.",
-      gradient: "from-purple-500 to-pink-500"
+      description: "Lightning-fast search engine with intelligent filters. Find books by title, author, genre, or even mood and reading level."
     },
     {
       icon: Star,
       title: "Personalized Curation",
-      description: "Discover hand-picked recommendations based on your reading history. Our experts select the finest literature just for you.",
-      gradient: "from-orange-500 to-red-500"
+      description: "Discover hand-picked recommendations based on your reading history. Our experts select the finest literature just for you."
     },
     {
       icon: Globe,
       title: "Cross-Platform Sync",
-      description: "Seamlessly continue reading across all your devices. Your bookmarks and progress sync automatically in real-time.",
-      gradient: "from-teal-500 to-emerald-500"
+      description: "Seamlessly continue reading across all your devices. Your bookmarks and progress sync automatically in real-time."
     },
     {
       icon: Filter,
       title: "Advanced Filtering",
-      description: "Sophisticated category system with multi-level filters. Sort by popularity, release date, ratings, or reading time.",
-      gradient: "from-indigo-500 to-purple-500"
+      description: "Sophisticated category system with multi-level filters. Sort by popularity, release date, ratings, or reading time."
     },
     {
       icon: Shield,
       title: "Zero Commitment",
-      description: "100% free forever. No subscriptions, no trials, no credit cards. Pure unrestricted access to knowledge and entertainment.",
-      gradient: "from-cyan-500 to-teal-500"
+      description: "100% free forever. No subscriptions, no trials, no credit cards. Pure unrestricted access to knowledge and entertainment."
     },
     {
       icon: Smartphone,
       title: "Mobile-First Design",
-      description: "Pixel-perfect responsive interface optimized for every screen size. Native app experience in your browser.",
-      gradient: "from-pink-500 to-rose-500"
+      description: "Pixel-perfect responsive interface optimized for every screen size. Native app experience in your browser."
     },
     {
       icon: Zap,
       title: "Blazing Performance",
-      description: "Sub-second load times powered by edge CDN. Optimized caching ensures instant page transitions and smooth scrolling.",
-      gradient: "from-yellow-500 to-orange-500"
+      description: "Sub-second load times powered by edge CDN. Optimized caching ensures instant page transitions and smooth scrolling."
     },
     {
       icon: Moon,
       title: "Adaptive Theming",
-      description: "Automatic dark mode with customizable reading themes. Reduce eye strain with adjustable brightness and sepia tones.",
-      gradient: "from-slate-500 to-gray-500"
+      description: "Automatic dark mode with customizable reading themes. Reduce eye strain with adjustable brightness and sepia tones."
     }
   ];
 
@@ -216,26 +207,23 @@ export default function Features() {
                   transition={{ duration: 0.5, delay: index * 0.1 }}
                   className="group relative"
                 >
-                  {/* Glow Effect */}
-                  <div className={`absolute inset-0 bg-gradient-to-r ${feature.gradient} opacity-0 group-hover:opacity-10 blur-xl transition-opacity duration-500 rounded-2xl`} />
+                  {/* Subtle Glow Effect */}
+                  <div className="absolute inset-0 bg-cyan-500/5 opacity-0 group-hover:opacity-100 blur-xl transition-opacity duration-500 rounded-2xl" />
                   
                   {/* Card */}
-                  <div className="relative bg-slate-900/50 backdrop-blur border border-slate-800 rounded-2xl p-8 hover:border-slate-700 transition-all duration-300 h-full hover:transform hover:scale-[1.02]">
+                  <div className="relative bg-slate-900/50 backdrop-blur border border-slate-800 rounded-2xl p-8 hover:border-cyan-500/30 transition-all duration-300 h-full hover:transform hover:scale-[1.02]">
                     {/* Icon Container */}
-                    <div className={`w-14 h-14 bg-gradient-to-r ${feature.gradient} rounded-xl flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300`}>
-                      <Icon className="w-7 h-7 text-white" />
+                    <div className="w-14 h-14 bg-cyan-500/10 border border-cyan-500/20 rounded-xl flex items-center justify-center mb-5 group-hover:bg-cyan-500/20 group-hover:scale-110 transition-all duration-300">
+                      <Icon className="w-7 h-7 text-cyan-400" />
                     </div>
                     
                     {/* Content */}
-                    <h3 className="text-2xl font-bold text-white mb-3 group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-gray-300 group-hover:bg-clip-text transition-all duration-300">
+                    <h3 className="text-2xl font-bold text-white mb-3">
                       {feature.title}
                     </h3>
                     <p className="text-gray-400 leading-relaxed">
                       {feature.description}
                     </p>
-
-                    {/* Corner Accent */}
-                    <div className={`absolute top-0 right-0 w-20 h-20 bg-gradient-to-br ${feature.gradient} opacity-5 rounded-bl-full`} />
                   </div>
                 </motion.div>
               );
@@ -251,10 +239,10 @@ export default function Features() {
           transition={{ duration: 0.6 }}
           className="max-w-4xl mx-auto mb-20"
         >
-          <div className="relative overflow-hidden bg-gradient-to-br from-slate-900/80 to-slate-800/80 backdrop-blur border border-slate-700 rounded-3xl p-12">
+          <div className="relative overflow-hidden bg-slate-900/50 backdrop-blur border border-slate-800 rounded-3xl p-12">
             {/* Background Elements */}
-            <div className="absolute top-0 right-0 w-72 h-72 bg-gradient-to-br from-cyan-500/20 to-blue-500/20 rounded-full blur-3xl" />
-            <div className="absolute bottom-0 left-0 w-72 h-72 bg-gradient-to-tr from-teal-500/20 to-emerald-500/20 rounded-full blur-3xl" />
+            <div className="absolute top-0 right-0 w-72 h-72 bg-cyan-500/10 rounded-full blur-3xl" />
+            <div className="absolute bottom-0 left-0 w-72 h-72 bg-teal-500/10 rounded-full blur-3xl" />
             
             <div className="relative z-10 text-center">
               <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
@@ -266,14 +254,13 @@ export default function Features() {
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link
                   href="/category"
-                  className="group relative px-8 py-4 bg-gradient-to-r from-cyan-500 to-teal-500 hover:from-cyan-400 hover:to-teal-400 text-white rounded-xl font-semibold transition-all duration-300 hover:scale-105 hover:shadow-[0_0_30px_rgba(6,182,212,0.5)]"
+                  className="group relative px-8 py-4 bg-gradient-to-r from-cyan-500 to-teal-500 hover:from-cyan-400 hover:to-teal-400 text-white rounded-xl font-semibold transition-all duration-300 hover:scale-105"
                 >
                   <span className="relative z-10">Explore Library</span>
-                  <div className="absolute inset-0 bg-gradient-to-r from-cyan-400 to-teal-400 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity blur" />
                 </Link>
                 <Link
                   href="/about"
-                  className="px-8 py-4 bg-slate-800 hover:bg-slate-700 text-white rounded-xl font-semibold transition-all duration-300 border border-slate-700 hover:border-slate-600"
+                  className="px-8 py-4 bg-slate-800/80 hover:bg-slate-700 text-white rounded-xl font-semibold transition-all duration-300 border border-slate-700 hover:border-slate-600"
                 >
                   Learn More
                 </Link>
