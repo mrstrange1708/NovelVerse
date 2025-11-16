@@ -1,4 +1,4 @@
-NovelVerse
+### NovelVerse
 
 A Digital Platform for Creative Writers and Readers
 
