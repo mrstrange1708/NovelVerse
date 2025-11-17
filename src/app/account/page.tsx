@@ -55,7 +55,7 @@ export default function Account() {
           animate={{ opacity: 1, scale: 1 }}
           className="flex flex-col items-center gap-4"
         >
-          <div className="w-16 h-16 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin" />
+          <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin" />
           <p className="text-white text-lg">Loading your profile...</p>
         </motion.div>
       </div>
@@ -69,46 +69,46 @@ export default function Account() {
       label: "Books Completed",
       value: user.booksRead || 0,
       icon: IconBook,
-      color: "emerald",
+      color: "blue",
       description: "Total books finished",
     },
     {
       label: "Reading Streak",
       value: "7 days",
       icon: IconTrendingUp,
-      color: "blue",
+      color: "cyan",
       description: "Keep it up!",
     },
     {
       label: "Total Books",
       value: user.readBooks?.length || 0,
       icon: IconAward,
-      color: "purple",
+      color: "indigo",
       description: "In your library",
     },
   ];
 
   const colorClasses = {
-    emerald: {
-      bg: "bg-emerald-500/20",
-      text: "text-emerald-400",
-      border: "border-emerald-500/30",
-    },
     blue: {
       bg: "bg-blue-500/20",
       text: "text-blue-400",
       border: "border-blue-500/30",
     },
-    purple: {
-      bg: "bg-purple-500/20",
-      text: "text-purple-400",
-      border: "border-purple-500/30",
+    cyan: {
+      bg: "bg-cyan-500/20",
+      text: "text-cyan-400",
+      border: "border-cyan-500/30",
+    },
+    indigo: {
+      bg: "bg-indigo-500/20",
+      text: "text-indigo-400",
+      border: "border-indigo-500/30",
     },
   };
 
   return (
-    <div className="bg-gradient-to-br from-black via-gray-900 to-black min-h-screen pt-20">
-      {/* Navbar */}
+    <div className="bg-black min-h-screen pt-20">
+      `{/* Navbar */}
       <Navbar>
         <NavBody className="py-0">
           <NavbarLogo />
@@ -153,7 +153,6 @@ export default function Account() {
           </MobileNavMenu>
         </MobileNav>
       </Navbar>
-
       {/* Main Content */}
       <div className="container mx-auto px-4 md:px-8 py-12 pb-20">
         <div className="max-w-7xl mx-auto">
@@ -166,7 +165,7 @@ export default function Account() {
           >
             <h1 className="text-4xl md:text-5xl font-bold text-white mb-2">
               Welcome back,{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">
                 {user.firstName}
               </span>
             </h1>
@@ -183,14 +182,14 @@ export default function Account() {
             className="relative overflow-hidden bg-gradient-to-br from-gray-900/80 to-gray-800/50 backdrop-blur-xl border border-gray-700/50 rounded-2xl p-8 mb-8 shadow-2xl"
           >
             {/* Decorative gradient orb */}
-            <div className="absolute -top-24 -right-24 w-48 h-48 bg-emerald-500/20 rounded-full blur-3xl" />
+            <div className="absolute -top-24 -right-24 w-48 h-48 bg-blue-500/20 rounded-full blur-3xl" />
             <div className="absolute -bottom-24 -left-24 w-48 h-48 bg-cyan-500/20 rounded-full blur-3xl" />
 
             <div className="relative flex flex-col md:flex-row items-center md:items-start gap-6">
               {/* Enhanced Avatar with gradient border */}
               <div className="relative">
-                <div className="absolute inset-0 bg-gradient-to-br from-emerald-400 to-cyan-400 rounded-full blur-md opacity-50" />
-                <div className="relative w-28 h-28 bg-gradient-to-br from-emerald-500 to-cyan-500 rounded-full flex items-center justify-center text-4xl font-bold text-white shadow-xl">
+                <div className="absolute inset-0 bg-gradient-to-br from-blue-400 to-cyan-400 rounded-full blur-md opacity-50" />
+                <div className="relative w-28 h-28 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-full flex items-center justify-center text-4xl font-bold text-white shadow-xl">
                   {user.firstName.charAt(0)}
                   {user.lastName.charAt(0)}
                 </div>
@@ -202,17 +201,15 @@ export default function Account() {
                   {user.firstName} {user.lastName}
                 </h2>
                 <p className="text-gray-400 mb-1 flex items-center justify-center md:justify-start gap-2">
-                  <span className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
+                  <span className="w-2 h-2 bg-blue-500 rounded-full animate-pulse" />
                   {user.email}
                 </p>
-                <p className="text-emerald-400 text-sm mb-6">
-                  Member since 2024
-                </p>
+                <p className="text-blue-400 text-sm mb-6">Member since 2024</p>
 
                 <div className="flex flex-wrap gap-3 justify-center md:justify-start">
                   <Link
                     href="/settings"
-                    className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-emerald-500/20 to-cyan-500/20 hover:from-emerald-500/30 hover:to-cyan-500/30 border border-emerald-500/30 text-emerald-300 rounded-xl transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-emerald-500/20"
+                    className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-500/20 to-cyan-500/20 hover:from-blue-500/30 hover:to-cyan-500/30 border border-blue-500/30 text-blue-300 rounded-xl transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-blue-500/20"
                   >
                     <IconSettings size={18} />
                     <span className="font-medium">Edit Profile</span>
@@ -270,7 +267,7 @@ export default function Account() {
             <div className="flex items-center justify-between mb-6">
               <div>
                 <h2 className="text-2xl font-bold text-white mb-1 flex items-center gap-2">
-                  <IconClock className="text-emerald-400" size={28} />
+                  <IconClock className="text-blue-400" size={28} />
                   Recently Read
                 </h2>
                 <p className="text-gray-400 text-sm">
@@ -280,7 +277,7 @@ export default function Account() {
               {recentBooks.length > 0 && (
                 <Link
                   href="/category"
-                  className="text-emerald-400 hover:text-emerald-300 text-sm font-medium flex items-center gap-1 transition-colors"
+                  className="text-blue-400 hover:text-blue-300 text-sm font-medium flex items-center gap-1 transition-colors"
                 >
                   View All
                   <span>→</span>
@@ -298,7 +295,7 @@ export default function Account() {
                     transition={{ delay: index * 0.1 }}
                   >
                     <Link href={`/book/${book.id}`} className="block group">
-                      <div className="bg-gray-800/50 hover:bg-gray-800 border border-gray-700/50 rounded-xl p-5 transition-all duration-300 hover:shadow-lg hover:shadow-emerald-500/10 hover:scale-105 hover:border-emerald-500/30">
+                      <div className="bg-gray-800/50 hover:bg-gray-800 border border-gray-700/50 rounded-xl p-5 transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/10 hover:scale-105 hover:border-blue-500/30">
                         <div className="flex items-start gap-3">
                           {book.coverImage ? (
                             <img
@@ -307,22 +304,19 @@ export default function Account() {
                               className="w-12 h-16 object-cover rounded-lg"
                             />
                           ) : (
-                            <div className="w-12 h-16 bg-gradient-to-br from-emerald-500/20 to-cyan-500/20 rounded-lg flex items-center justify-center">
-                              <IconBook
-                                className="text-emerald-400"
-                                size={24}
-                              />
+                            <div className="w-12 h-16 bg-gradient-to-br from-blue-500/20 to-cyan-500/20 rounded-lg flex items-center justify-center">
+                              <IconBook className="text-blue-400" size={24} />
                             </div>
                           )}
                           <div className="flex-1 min-w-0">
-                            <h3 className="text-white font-semibold group-hover:text-emerald-300 transition-colors truncate mb-1">
+                            <h3 className="text-white font-semibold group-hover:text-blue-300 transition-colors truncate mb-1">
                               {book.title}
                             </h3>
                             <p className="text-gray-400 text-sm truncate mb-2">
                               {book.author}
                             </p>
                             {book.category && (
-                              <span className="inline-block text-xs text-emerald-400 font-medium px-2 py-1 bg-emerald-500/10 border border-emerald-500/20 rounded-md">
+                              <span className="inline-block text-xs text-blue-400 font-medium px-2 py-1 bg-blue-500/10 border border-blue-500/20 rounded-md">
                                 {book.category}
                               </span>
                             )}
@@ -352,7 +346,7 @@ export default function Account() {
                 </p>
                 <Link
                   href="/category"
-                  className="inline-flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-600 hover:to-cyan-600 text-white font-medium rounded-xl transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-emerald-500/30"
+                  className="inline-flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white font-medium rounded-xl transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-blue-500/30"
                 >
                   <IconStar size={20} />
                   Explore Books
@@ -384,7 +378,6 @@ export default function Account() {
           </motion.div>
         </div>
       </div>
-
       <Footer />
     </div>
   );

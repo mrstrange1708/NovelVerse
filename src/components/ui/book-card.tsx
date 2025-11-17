@@ -46,16 +46,13 @@ export function BookCard({ id, title, author, coverImage }: BookCardProps) {
 
           {/* Book Info Overlay */}
           <div className="absolute bottom-0 left-0 right-0 p-3 z-10">
-            <h3 className="text-white font-semibold text-sm mb-1 line-clamp-2 group-hover:text-emerald-300 transition-colors">
+            <h3 className="text-white font-semibold text-sm mb-1 line-clamp-2 group-hover:text-blue-300 transition-colors">
               {title}
             </h3>
-            <p className="text-gray-300 text-xs line-clamp-1">
-              {author}
-            </p>
+            <p className="text-gray-300 text-xs line-clamp-1">{author}</p>
           </div>
         </div>
       </motion.div>
     </Link>
   );
 }
-

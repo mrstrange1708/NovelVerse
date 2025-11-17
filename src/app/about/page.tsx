@@ -30,10 +30,8 @@ export default function About() {
   ];
 
   return (
-    <div className=" min-h-screen bg-slate-950">
-      {/* Navbar */}
+    <div className="min-h-screen bg-black">
       <Navbar>
-        {/* Desktop Navigation */}
         <NavBody className="py-0">
           <NavbarLogo />
           <NavItems items={navItems} />
@@ -83,13 +81,13 @@ export default function About() {
       <LampContainer>
         <motion.h1
           initial={{ opacity: 0.5, y: 200 }}
-          whileInView={{ opacity: 1, y: -100 }}
+          whileInView={{ opacity: 1, y: -90 }}
           transition={{
             delay: 0.5,
             duration: 1.5,
             ease: "easeInOut",
           }}
-          className="bg-gradient-to-br from-cyan-200 via-cyan-400 to-teal-400 bg-clip-text text-white text-center text-6xl font-medium tracking-tight text-transparent md:text-7xl"
+          className="bg-black from-cyan-200 via-cyan-400 to-teal-400 bg-clip-text text-white text-center text-bold lg:text-8xl font-medium tracking-tight text-transparent md:text-7xl"
         >
           About <br />
           <span className="bg-gradient-to-r from-cyan-300 to-teal-300 bg-clip-text">
@@ -99,7 +97,7 @@ export default function About() {
       </LampContainer>
 
       {/* Mission Section */}
-      <div className="container mx-auto px-4 md:px-8 py-20 bg-slate-950">
+      <div className="container mx-auto px-4 md:px-8 py-20 bg-black">
         <div className="max-w-6xl mx-auto">
           {/* Main Mission Statement */}
           <motion.div

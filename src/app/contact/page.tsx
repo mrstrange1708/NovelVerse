@@ -54,7 +54,7 @@ export default function ContactPage() {
         <NavBody>
           <NavbarLogo />
           <NavItems items={navItems} />
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 z-99">
             <NavbarIconButton href="/account" ariaLabel="Account" />
             
           </div>

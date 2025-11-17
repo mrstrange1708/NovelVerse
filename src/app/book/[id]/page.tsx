@@ -119,7 +119,7 @@ export default function BookDetailsPage() {
           </p>
           <Link
             href="/category"
-            className="px-6 py-3 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg transition-colors inline-block"
+            className="px-6 py-3 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors inline-block"
           >
             Back to Categories
           </Link>
@@ -224,7 +224,7 @@ export default function BookDetailsPage() {
                 {book.title}
               </h1>
               <p className="text-xl text-gray-300 mb-4">by {book.author}</p>
-              <span className="inline-block px-4 py-2 bg-emerald-500/20 text-emerald-300 rounded-full text-sm font-semibold">
+              <span className="inline-block px-4 py-2 bg-blue-500/20 text-blue-300 rounded-full text-sm font-semibold">
                 {book.category}
               </span>
             </div>
@@ -276,7 +276,7 @@ export default function BookDetailsPage() {
                 href={book.pdfUrl || "#"}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-3 w-full md:w-auto px-8 py-4 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg font-semibold transition-all duration-300 hover:scale-105 shadow-lg shadow-emerald-500/30"
+                className="inline-flex items-center justify-center gap-3 w-full md:w-auto px-8 py-4 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-semibold transition-all duration-300 hover:scale-105 shadow-lg shadow-blue-500/30"
               >
                 <IconBookDownload size={24} />
                 <span>Read Now</span>

@@ -13,22 +13,14 @@ import {
   MobileNavMenu,
   NavbarButton,
 } from "@/components/ui/resizable-navbar";
-import {
-  User,
-  BookOpen,
-  Zap,
-  Search,
-  Star,
-  Globe,
-  Smartphone,
-  Moon,
-  Filter,
-  Shield,
-} from "lucide-react";
+import { User } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion } from "motion/react";
+import { cn } from "@/lib/utils";
+import createGlobe from "cobe";
+import { IconBrandYoutubeFilled } from "@tabler/icons-react";
 import { ContainerScroll } from "@/components/ui/container-scroll-animation";
 
 export default function Features() {
@@ -41,68 +33,40 @@ export default function Features() {
     { name: "Contact", link: "/contact" },
   ];
 
-  const features = [
+  const featuresData = [
     {
-      icon: BookOpen,
       title: "Vast Digital Library",
       description:
-        "Access over 50,000+ curated books spanning fiction, non-fiction, self-help, business, science fiction, and academic literature.",
+        "Access over 50,000+ curated books spanning all genres from fiction to academic literature.",
+      skeleton: <SkeletonOne />,
+      className:
+        "col-span-1 lg:col-span-4 border-b lg:border-r dark:border-neutral-800",
     },
     {
-      icon: Search,
       title: "AI-Powered Search",
       description:
-        "Lightning-fast search engine with intelligent filters. Find books by title, author, genre, or even mood and reading level.",
+        "Find books instantly with our intelligent search engine and smart filters.",
+      skeleton: <SkeletonTwo />,
+      className: "border-b col-span-1 lg:col-span-2 dark:border-neutral-800",
     },
     {
-      icon: Star,
-      title: "Personalized Curation",
+      title: "Read Anywhere",
       description:
-        "Discover hand-picked recommendations based on your reading history. Our experts select the finest literature just for you.",
+        "Seamlessly continue reading across all your devices with real-time sync.",
+      skeleton: <SkeletonThree />,
+      className: "col-span-1 lg:col-span-3 lg:border-r dark:border-neutral-800",
     },
     {
-      icon: Globe,
-      title: "Cross-Platform Sync",
+      title: "Global Access",
       description:
-        "Seamlessly continue reading across all your devices. Your bookmarks and progress sync automatically in real-time.",
-    },
-    {
-      icon: Filter,
-      title: "Advanced Filtering",
-      description:
-        "Sophisticated category system with multi-level filters. Sort by popularity, release date, ratings, or reading time.",
-    },
-    {
-      icon: Shield,
-      title: "Zero Commitment",
-      description:
-        "100% free forever. No subscriptions, no trials, no credit cards. Pure unrestricted access to knowledge and entertainment.",
-    },
-    {
-      icon: Smartphone,
-      title: "Mobile-First Design",
-      description:
-        "Pixel-perfect responsive interface optimized for every screen size. Native app experience in your browser.",
-    },
-    {
-      icon: Zap,
-      title: "Blazing Performance",
-      description:
-        "Sub-second load times powered by edge CDN. Optimized caching ensures instant page transitions and smooth scrolling.",
-    },
-    {
-      icon: Moon,
-      title: "Adaptive Theming",
-      description:
-        "Automatic dark mode with customizable reading themes. Reduce eye strain with adjustable brightness and sepia tones.",
+        "Available worldwide with blazing-fast performance powered by global CDN infrastructure.",
+      skeleton: <SkeletonFour />,
+      className: "col-span-1 lg:col-span-3 border-b lg:border-none",
     },
   ];
 
   return (
     <div className="bg-black min-h-screen relative">
-      {/* Grid Background */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#1f1f1f_1px,transparent_1px),linear-gradient(to_bottom,#1f1f1f_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_0%,#000_70%,transparent_110%)]" />
-
       {/* Navbar */}
       <Navbar>
         <NavBody className="py-0">
@@ -151,7 +115,7 @@ export default function Features() {
       </Navbar>
 
       {/* Container Scroll Section */}
-      <div className="pb-20 relative z-10">
+      <div className="pb-10 relative z-10">
         <ContainerScroll
           titleComponent={
             <>
@@ -175,121 +139,249 @@ export default function Features() {
               alt="NovelVerse Library Interface"
               className="w-full h-full object-cover object-center opacity-90"
               draggable={false}
-              width={10}
-              height={10}
+              width={1200}
+              height={800}
             />
           </div>
         </ContainerScroll>
       </div>
 
-      {/* Hero Section */}
-      <div className="container mx-auto px-4 md:px-8 py-20 relative z-10">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="max-w-4xl mx-auto text-center mb-20"
-        >
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.5 }}
-            className="inline-block mb-4"
-          >
-            <span className="px-4 py-2 bg-gradient-to-r from-cyan-500/10 to-teal-500/10 border border-cyan-500/20 rounded-full text-cyan-400 text-sm font-semibold">
-              ✨ Next-Gen Reading Platform
-            </span>
-          </motion.div>
-          <h1 className="text-5xl md:text-7xl font-bold text-white mb-6">
-            Powerful{" "}
-            <span className="bg-gradient-to-r from-cyan-400 via-blue-400 to-teal-400 bg-clip-text text-transparent">
-              Features
-            </span>
-          </h1>
-          <p className="text-xl md:text-2xl text-gray-300">
-            Built for readers who demand excellence in every detail
+      {/* Features Section */}
+      <div className="relative z-20 py-10 lg:py-20 max-w-7xl mx-auto">
+        <div className="px-8">
+          <h4 className="text-2xl lg:text-4xl lg:leading-tight max-w-5xl mx-auto text-center tracking-tight font-medium text-black dark:text-white">
+            Packed with powerful features
+          </h4>
+
+          <p className="text-sm lg:text-base max-w-2xl my-4 mx-auto text-neutral-500 text-center font-normal dark:text-neutral-300">
+            From AI-powered search to cross-device sync, NovelVerse has
+            everything you need for the perfect reading experience.
           </p>
-        </motion.div>
-
-        {/* Features Grid */}
-        <div className="max-w-7xl mx-auto">
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-20">
-            {features.map((feature, index) => {
-              const Icon = feature.icon;
-              return (
-                <motion.div
-                  key={feature.title}
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                  className="group relative"
-                >
-                  {/* Subtle Glow Effect */}
-                  <div className="absolute inset-0 bg-cyan-500/5 opacity-0 group-hover:opacity-100 blur-xl transition-opacity duration-500 rounded-2xl" />
-
-                  {/* Card */}
-                  <div className="relative bg-slate-900/50 backdrop-blur border border-slate-800 rounded-2xl p-8 hover:border-cyan-500/30 transition-all duration-300 h-full hover:transform hover:scale-[1.02]">
-                    {/* Icon Container */}
-                    <div className="w-14 h-14 bg-cyan-500/10 border border-cyan-500/20 rounded-xl flex items-center justify-center mb-5 group-hover:bg-cyan-500/20 group-hover:scale-110 transition-all duration-300">
-                      <Icon className="w-7 h-7 text-cyan-400" />
-                    </div>
-
-                    {/* Content */}
-                    <h3 className="text-2xl font-bold text-white mb-3">
-                      {feature.title}
-                    </h3>
-                    <p className="text-gray-400 leading-relaxed">
-                      {feature.description}
-                    </p>
-                  </div>
-                </motion.div>
-              );
-            })}
-          </div>
         </div>
 
-        {/* CTA Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="max-w-4xl mx-auto mb-20"
-        >
-          <div className="relative overflow-hidden bg-slate-900/50 backdrop-blur border border-slate-800 rounded-3xl p-12">
-            {/* Background Elements */}
-            <div className="absolute top-0 right-0 w-72 h-72 bg-cyan-500/10 rounded-full blur-3xl" />
-            <div className="absolute bottom-0 left-0 w-72 h-72 bg-teal-500/10 rounded-full blur-3xl" />
-
-            <div className="relative z-10 text-center">
-              <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
-                Ready to Transform Your Reading?
-              </h2>
-              <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
-                Join thousands of readers who&#39;ve discovered their next
-                favorite book on NovelVerse
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Link
-                  href="/category"
-                  className="group relative px-8 py-4 bg-gradient-to-r from-cyan-500 to-teal-500 hover:from-cyan-400 hover:to-teal-400 text-white rounded-xl font-semibold transition-all duration-300 hover:scale-105"
-                >
-                  <span className="relative z-10">Explore Library</span>
-                </Link>
-                <Link
-                  href="/about"
-                  className="px-8 py-4 bg-slate-800/80 hover:bg-slate-700 text-white rounded-xl font-semibold transition-all duration-300 border border-slate-700 hover:border-slate-600"
-                >
-                  Learn More
-                </Link>
-              </div>
-            </div>
+        <div className="relative">
+          <div className="grid grid-cols-1 lg:grid-cols-6 mt-12 xl:border rounded-md dark:border-neutral-800">
+            {featuresData.map((feature) => (
+              <FeatureCard key={feature.title} className={feature.className}>
+                <FeatureTitle>{feature.title}</FeatureTitle>
+                <FeatureDescription>{feature.description}</FeatureDescription>
+                <div className="h-full w-full">{feature.skeleton}</div>
+              </FeatureCard>
+            ))}
           </div>
-        </motion.div>
+        </div>
       </div>
 
       <Footer />
     </div>
   );
 }
+
+const FeatureCard = ({
+  children,
+  className,
+}: {
+  children?: React.ReactNode;
+  className?: string;
+}) => {
+  return (
+    <div className={cn(`p-4 sm:p-8 relative overflow-hidden`, className)}>
+      {children}
+    </div>
+  );
+};
+
+const FeatureTitle = ({ children }: { children?: React.ReactNode }) => {
+  return (
+    <p className="max-w-5xl mx-auto text-left tracking-tight text-black dark:text-white text-xl md:text-2xl md:leading-snug">
+      {children}
+    </p>
+  );
+};
+
+const FeatureDescription = ({ children }: { children?: React.ReactNode }) => {
+  return (
+    <p
+      className={cn(
+        "text-sm md:text-base max-w-4xl text-left mx-auto",
+        "text-neutral-500 text-center font-normal dark:text-neutral-300",
+        "text-left max-w-sm mx-0 md:text-sm my-2"
+      )}
+    >
+      {children}
+    </p>
+  );
+};
+
+const SkeletonOne = () => {
+  return (
+    <div className="relative flex py-8 px-2 gap-10 h-fit-content">
+      <div className="w-full p-5 mx-auto bg-white dark:bg-neutral-900 shadow-2xl group h-full">
+        <div className="flex flex-1 w-full h-full flex-col space-y-2">
+          <Image
+            src="/FeaturedImg.jpg"
+            alt="Book Library Interface"
+            width={800}
+            height={800}
+            className="h-full w-full aspect-square object-cover object-left-top rounded-sm"
+          />
+        </div>
+      </div>
+
+      <div className="absolute bottom-0 z-40 inset-x-0 h-60 bg-gradient-to-t from-white dark:from-black via-white dark:via-black to-transparent w-full pointer-events-none" />
+      <div className="absolute top-0 z-40 inset-x-0 h-60 bg-gradient-to-b from-white dark:from-black via-transparent to-transparent w-full pointer-events-none" />
+    </div>
+  );
+};
+
+const SkeletonTwo = () => {
+  const images = [
+    "https://images.unsplash.com/photo-1512820790803-83ca734da794?w=800",
+    "https://images.unsplash.com/photo-1524578271613-d550eacf6090?w=800",
+    "https://images.unsplash.com/photo-1495446815901-a7297e633e8d?w=800",
+    "https://images.unsplash.com/photo-1519682577862-22b62b24e493?w=800",
+    "https://images.unsplash.com/photo-1543002588-bfa74002ed7e?w=800",
+  ];
+
+  const imageVariants = {
+    whileHover: {
+      scale: 1.1,
+      rotate: 0,
+      zIndex: 100,
+    },
+    whileTap: {
+      scale: 1.1,
+      rotate: 0,
+      zIndex: 100,
+    },
+  };
+
+  return (
+    <div className="relative flex flex-col items-start p-8 gap-10 h-full overflow-hidden">
+      <div className="flex flex-row -ml-20">
+        {images.map((image, idx) => (
+          <motion.div
+            variants={imageVariants}
+            key={"images-first" + idx}
+            style={{
+              rotate: Math.random() * 20 - 10,
+            }}
+            whileHover="whileHover"
+            whileTap="whileTap"
+            className="rounded-xl -mr-4 mt-4 p-1 bg-white dark:bg-neutral-800 dark:border-neutral-700 border border-neutral-100 shrink-0 overflow-hidden"
+          >
+            <img
+              src={image}
+              alt="book covers"
+              width="500"
+              height="500"
+              className="rounded-lg h-20 w-20 md:h-40 md:w-40 object-cover shrink-0"
+            />
+          </motion.div>
+        ))}
+      </div>
+      <div className="flex flex-row">
+        {images.map((image, idx) => (
+          <motion.div
+            key={"images-second" + idx}
+            style={{
+              rotate: Math.random() * 20 - 10,
+            }}
+            variants={imageVariants}
+            whileHover="whileHover"
+            whileTap="whileTap"
+            className="rounded-xl -mr-4 mt-4 p-1 bg-white dark:bg-neutral-800 dark:border-neutral-700 border border-neutral-100 shrink-0 overflow-hidden"
+          >
+            <img
+              src={image}
+              alt="book covers"
+              width="500"
+              height="500"
+              className="rounded-lg h-20 w-20 md:h-40 md:w-40 object-cover shrink-0"
+            />
+          </motion.div>
+        ))}
+      </div>
+
+      <div className="absolute left-0 z-[100] inset-y-0 w-20 bg-gradient-to-r from-white dark:from-black to-transparent h-full pointer-events-none" />
+      <div className="absolute right-0 z-[100] inset-y-0 w-20 bg-gradient-to-l from-white dark:from-black to-transparent h-full pointer-events-none" />
+    </div>
+  );
+};
+
+const SkeletonThree = () => {
+  return (
+    <a
+      href="https://www.youtube.com/watch?v=RPa3_AD1_Vs"
+      target="__blank"
+      className="relative flex gap-10 h-full group/image"
+    >
+      <div className="w-full mx-auto bg-transparent dark:bg-transparent group h-full">
+        <div className="flex flex-1 w-full h-full flex-col space-y-2 relative">
+          <IconBrandYoutubeFilled className="h-20 w-20 absolute z-10 inset-0 text-red-500 m-auto" />
+          <img
+            src="https://images.unsplash.com/photo-1507842217343-583bb7270b66?w=800"
+            alt="Reading experience"
+            width={800}
+            height={800}
+            className="h-full w-full aspect-square object-cover object-center rounded-sm blur-none group-hover/image:blur-md transition-all duration-200"
+          />
+        </div>
+      </div>
+    </a>
+  );
+};
+
+const SkeletonFour = () => {
+  return (
+    <div className="h-60 md:h-60 flex flex-col items-center relative bg-transparent dark:bg-transparent mt-10">
+      <Globe className="absolute -right-10 md:-right-10 -bottom-80 md:-bottom-72" />
+    </div>
+  );
+};
+
+const Globe = ({ className }: { className?: string }) => {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  useEffect(() => {
+    let phi = 0;
+
+    if (!canvasRef.current) return;
+
+    const globe = createGlobe(canvasRef.current, {
+      devicePixelRatio: 2,
+      width: 600 * 2,
+      height: 600 * 2,
+      phi: 0,
+      theta: 0,
+      dark: 1,
+      diffuse: 1.2,
+      mapSamples: 16000,
+      mapBrightness: 6,
+      baseColor: [0.3, 0.3, 0.3],
+      markerColor: [0.1, 0.8, 1],
+      glowColor: [1, 1, 1],
+      markers: [
+        { location: [37.7595, -122.4367], size: 0.03 },
+        { location: [40.7128, -74.006], size: 0.1 },
+      ],
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      onRender: (state: any) => {
+        state.phi = phi;
+        phi += 0.01;
+      },
+    });
+
+    return () => {
+      globe.destroy();
+    };
+  }, []);
+
+  return (
+    <canvas
+      ref={canvasRef}
+      style={{ width: 600, height: 600, maxWidth: "100%", aspectRatio: 1 }}
+      className={className}
+    />
+  );
+};

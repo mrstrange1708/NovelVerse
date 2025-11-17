@@ -175,7 +175,7 @@ export default function Category() {
               placeholder="Search books by title, author, or description..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-12 pr-12 py-3 bg-gray-900 text-white border border-gray-800 rounded-full focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+              className="w-full pl-12 pr-12 py-3 bg-gray-900 text-white border border-gray-800 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
             {searchQuery && (
               <button
@@ -196,7 +196,7 @@ export default function Category() {
               onClick={() => setSelectedCategory(category)}
               className={`px-6 py-2 rounded-full font-semibold transition-all duration-200 whitespace-nowrap ${
                 selectedCategory === category
-                  ? "bg-emerald-500 text-white"
+                  ? "bg-blue-500 text-white"
                   : "bg-gray-800 text-gray-300 hover:bg-gray-700"
               }`}
             >
