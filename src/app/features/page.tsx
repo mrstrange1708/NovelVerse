@@ -67,7 +67,6 @@ export default function Features() {
 
   return (
     <div className="bg-black min-h-screen relative">
-      {/* Navbar */}
       <Navbar>
         <NavBody className="py-0">
           <NavbarLogo />
@@ -79,7 +78,7 @@ export default function Features() {
           </div>
         </NavBody>
 
-        {/* Mobile Navigation */}
+
         <MobileNav>
           <MobileNavHeader>
             <NavbarLogo />
@@ -114,7 +113,7 @@ export default function Features() {
         </MobileNav>
       </Navbar>
 
-      {/* Container Scroll Section */}
+
       <div className="pb-10 relative z-10">
         <ContainerScroll
           titleComponent={
@@ -146,7 +145,7 @@ export default function Features() {
         </ContainerScroll>
       </div>
 
-      {/* Features Section */}
+
       <div className="relative z-20 py-10 lg:py-20 max-w-7xl mx-auto">
         <div className="px-8">
           <h4 className="text-2xl lg:text-4xl lg:leading-tight max-w-5xl mx-auto text-center tracking-tight font-medium text-black dark:text-white">
@@ -365,7 +364,7 @@ const Globe = ({ className }: { className?: string }) => {
         { location: [37.7595, -122.4367], size: 0.03 },
         { location: [40.7128, -74.006], size: 0.1 },
       ],
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
       onRender: (state: any) => {
         state.phi = phi;
         phi += 0.01;

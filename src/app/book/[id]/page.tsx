@@ -40,7 +40,6 @@ export default function BookDetailsPage() {
   ];
 
   useEffect(() => {
-    // Redirect to login if not authenticated
     if (!apiService.isAuthenticated()) {
       router.replace("/login");
       return;
@@ -130,9 +129,7 @@ export default function BookDetailsPage() {
 
   return (
     <div className="bg-black min-h-screen">
-      {/* Navbar */}
       <Navbar>
-        {/* Desktop Navigation */}
         <NavBody className="py-0">
           <NavbarLogo />
           <NavItems items={navItems} />
@@ -143,7 +140,6 @@ export default function BookDetailsPage() {
           </div>
         </NavBody>
 
-        {/* Mobile Navigation */}
         <MobileNav>
           <MobileNavHeader>
             <NavbarLogo />
@@ -178,9 +174,8 @@ export default function BookDetailsPage() {
         </MobileNav>
       </Navbar>
 
-      {/* Main Content */}
+
       <div className="container mx-auto px-4 md:px-8 py-26">
-        {/* Back Button */}
         <button
           onClick={() => router.back()}
           className="mb-8 flex items-center gap-2 text-gray-400 hover:text-white transition-colors"
@@ -189,14 +184,12 @@ export default function BookDetailsPage() {
           <span>Back</span>
         </button>
 
-        {/* Book Details */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
           className="grid md:grid-cols-2 gap-8 lg:gap-12"
         >
-          {/* Cover Image */}
           <div className="flex justify-center md:justify-start">
             <div className="relative w-full max-w-md aspect-[2/3] rounded-lg overflow-hidden border border-gray-800 bg-gray-900">
               {book.coverImage ? (
@@ -217,7 +210,6 @@ export default function BookDetailsPage() {
             </div>
           </div>
 
-          {/* Book Info */}
           <div className="space-y-6">
             <div>
               <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
@@ -240,7 +232,6 @@ export default function BookDetailsPage() {
               </div>
             )}
 
-            {/* Book Metadata */}
             <div className="grid grid-cols-2 gap-4 pt-4 border-t border-gray-800">
               <div>
                 <p className="text-gray-400 text-sm mb-1">Language</p>
@@ -270,7 +261,6 @@ export default function BookDetailsPage() {
               )}
             </div>
 
-            {/* Read Now Button */}
             <div className="pt-6">
               <a
                 href={book.pdfUrl || "#"}
@@ -286,7 +276,6 @@ export default function BookDetailsPage() {
         </motion.div>
       </div>
 
-      {/* Footer */}
       <Footer />
     </div>
   );

@@ -17,7 +17,7 @@ export default function SignupFormDemo() {
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  const { login } = useAuth(); // optional: auto-login after signup
+  const { login } = useAuth(); 
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -26,21 +26,18 @@ export default function SignupFormDemo() {
     setIsLoading(true);
 
     try {
-      // Call signup API
       const response = await apiService.register({ firstName, lastName, email, password });
       console.log("Signup success:", response);
 
-      // Optionally log in user after signup
       if (response.token) {
         apiService.setToken(response.token);
 
         if (response.user) {
-          // update context manually if needed
           await login(email, password);
         }
       }
 
-      // Redirect after successful signup
+
       router.push("/home");
     } catch (err: unknown) {
       if (err instanceof Error) {

@@ -25,7 +25,7 @@ export default function LoginFormDemo() {
     try {
       await login(email, password);
       setIsLoading(true);
-      router.push("/home"); // Redirect to home page after successful login
+      router.push("/home"); 
     } catch (err: unknown) {
       if (err instanceof Error) {
         setError(err.message);

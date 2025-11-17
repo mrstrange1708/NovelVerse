@@ -76,12 +76,10 @@ export default function Category() {
   useEffect(() => {
     let filtered = books;
 
-    // Filter by category
     if (selectedCategory !== "All") {
       filtered = filtered.filter((book) => book.category === selectedCategory);
     }
 
-    // Filter by search query
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase();
       filtered = filtered.filter(
@@ -111,9 +109,7 @@ export default function Category() {
 
   return (
     <div className="bg-black min-h-screen">
-      {/* Navbar */}
       <Navbar>
-        {/* Desktop Navigation */}
         <NavBody className="py-0">
           <NavbarLogo />
           <NavItems items={navItems} />
@@ -124,7 +120,7 @@ export default function Category() {
           </div>
         </NavBody>
 
-        {/* Mobile Navigation */}
+
         <MobileNav>
           <MobileNavHeader>
             <NavbarLogo />
@@ -160,11 +156,9 @@ export default function Category() {
       </Navbar>
 
       <div className="container mx-auto px-4 py-36">
-        {/* Header Row (Title + Search Bar) */}
         <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
           <h1 className="text-5xl font-bold text-white">Book Categories</h1>
 
-          {/* Search Bar */}
           <div className="relative w-full md:w-1/2 lg:w-1/3">
             <Search
               className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400"
@@ -188,7 +182,6 @@ export default function Category() {
           </div>
         </div>
 
-        {/* Category Filters */}
         <div className="flex gap-4 mb-8 overflow-x-auto pb-4 scrollbar-hide">
           {CATEGORIES.map((category) => (
             <button

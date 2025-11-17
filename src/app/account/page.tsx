@@ -108,7 +108,6 @@ export default function Account() {
 
   return (
     <div className="bg-black min-h-screen pt-20">
-      `{/* Navbar */}
       <Navbar>
         <NavBody className="py-0">
           <NavbarLogo />
@@ -153,10 +152,9 @@ export default function Account() {
           </MobileNavMenu>
         </MobileNav>
       </Navbar>
-      {/* Main Content */}
+
       <div className="container mx-auto px-4 md:px-8 py-12 pb-20">
         <div className="max-w-7xl mx-auto">
-          {/* Header with gradient */}
           <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -174,19 +172,18 @@ export default function Account() {
             </p>
           </motion.div>
 
-          {/* Profile Card with Enhanced Design */}
+
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
             className="relative overflow-hidden bg-gradient-to-br from-gray-900/80 to-gray-800/50 backdrop-blur-xl border border-gray-700/50 rounded-2xl p-8 mb-8 shadow-2xl"
           >
-            {/* Decorative gradient orb */}
+
             <div className="absolute -top-24 -right-24 w-48 h-48 bg-blue-500/20 rounded-full blur-3xl" />
             <div className="absolute -bottom-24 -left-24 w-48 h-48 bg-cyan-500/20 rounded-full blur-3xl" />
 
             <div className="relative flex flex-col md:flex-row items-center md:items-start gap-6">
-              {/* Enhanced Avatar with gradient border */}
               <div className="relative">
                 <div className="absolute inset-0 bg-gradient-to-br from-blue-400 to-cyan-400 rounded-full blur-md opacity-50" />
                 <div className="relative w-28 h-28 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-full flex items-center justify-center text-4xl font-bold text-white shadow-xl">
@@ -195,7 +192,7 @@ export default function Account() {
                 </div>
               </div>
 
-              {/* User Info with better typography */}
+
               <div className="flex-1 text-center md:text-left">
                 <h2 className="text-3xl font-bold text-white mb-1">
                   {user.firstName} {user.lastName}
@@ -219,7 +216,7 @@ export default function Account() {
             </div>
           </motion.div>
 
-          {/* Enhanced Stats Grid */}
+
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
             {stats.map((stat, index) => {
               const colors =
@@ -257,7 +254,7 @@ export default function Account() {
             })}
           </div>
 
-          {/* Enhanced Recent Books Section */}
+
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -355,7 +352,7 @@ export default function Account() {
             )}
           </motion.div>
 
-          {/* Logout Button with better styling */}
+
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}

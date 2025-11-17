@@ -12,7 +12,6 @@ import { useEffect } from "react";
 export default function Home() {
   const router = useRouter();
   useEffect(() => {
-    // Handle Google OAuth token in URL if present
     apiService.handleGoogleCallback();
 
     if (!apiService.isAuthenticated()) {

@@ -32,7 +32,6 @@ export function HeroSection() {
     return (
         <div className="relative w-full mt-[-40px] p-0">
             <Navbar>
-                {/* Desktop Navigation */}
                 <NavBody className="py-0">
                     <NavbarLogo />
                     <NavItems items={navItems} />
@@ -46,7 +45,6 @@ export function HeroSection() {
                     </div>
                 </NavBody>
 
-                {/* Mobile Navigation */}
                 <MobileNav>
                     <MobileNavHeader>
                         <NavbarLogo />

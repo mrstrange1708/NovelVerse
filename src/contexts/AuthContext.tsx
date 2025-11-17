@@ -20,7 +20,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
 
     useEffect(() => {
-        // Load user and auth state from localStorage on mount
         const token = apiService.getToken();
         const storedUser = apiService.getUser();
         

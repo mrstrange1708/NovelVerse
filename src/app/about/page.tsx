@@ -42,7 +42,6 @@ export default function About() {
           </div>
         </NavBody>
 
-        {/* Mobile Navigation */}
         <MobileNav>
           <MobileNavHeader>
             <NavbarLogo />
@@ -77,7 +76,7 @@ export default function About() {
         </MobileNav>
       </Navbar>
 
-      {/* Hero Section with Lamp */}
+
       <LampContainer>
         <motion.h1
           initial={{ opacity: 0.5, y: 200 }}
@@ -87,7 +86,7 @@ export default function About() {
             duration: 1.5,
             ease: "easeInOut",
           }}
-          className="bg-black from-cyan-200 via-cyan-400 to-teal-400 bg-clip-text text-white text-center text-bold lg:text-8xl font-medium tracking-tight text-transparent md:text-7xl"
+          className="bg-black from-cyan-200 via-cyan-400 to-teal-400 bg-clip-text text-white text-center text-bold lg:text-8xl font-medium tracking-tight md:text-7xl"
         >
           About <br />
           <span className="bg-gradient-to-r from-cyan-300 to-teal-300 bg-clip-text">
@@ -96,10 +95,9 @@ export default function About() {
         </motion.h1>
       </LampContainer>
 
-      {/* Mission Section */}
+
       <div className="container mx-auto px-4 md:px-8 py-20 bg-black">
         <div className="max-w-6xl mx-auto">
-          {/* Main Mission Statement */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -121,7 +119,6 @@ export default function About() {
             </p>
           </motion.div>
 
-          {/* Feature Grid */}
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-20">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -210,7 +207,6 @@ export default function About() {
             </motion.div>
           </div>
 
-          {/* Who We Are Section */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -245,7 +241,6 @@ export default function About() {
         </div>
       </div>
 
-      {/* Container Scroll Section */}
 
       <Footer />
     </div>
