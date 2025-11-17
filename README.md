@@ -127,4 +127,7 @@ Endpoint	Method	Description	Access
 
 📬 Contact - junaidsamishaik@gmail.com
 
+### Backend Github link - https://github.com/mrstrange1708/NovelVerse-backend
+### Hosted Github link - https://novel-verse-ten.vercel.app
+
 For queries or contributions, open an issue or submit a pull request.
