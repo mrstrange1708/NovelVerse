@@ -11,14 +11,25 @@ import {
   MobileNavHeader,
   MobileNavToggle,
   MobileNavMenu,
-  NavbarButton
+  NavbarButton,
 } from "@/components/ui/resizable-navbar";
-import { User, BookOpen, Zap, Search, Star, Globe, Smartphone, Moon, Filter, Shield } from "lucide-react";
+import {
+  User,
+  BookOpen,
+  Zap,
+  Search,
+  Star,
+  Globe,
+  Smartphone,
+  Moon,
+  Filter,
+  Shield,
+} from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 import { useState } from "react";
 import { motion } from "motion/react";
 import { ContainerScroll } from "@/components/ui/container-scroll-animation";
-import { BackgroundRippleEffect } from "@/components/ui/background-ripple-effect";
 
 export default function Features() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -26,63 +37,72 @@ export default function Features() {
   const navItems = [
     { name: "About", link: "/about" },
     { name: "Features", link: "/features" },
-    { name: "Category", link: "/category" }, 
+    { name: "Category", link: "/category" },
+    { name: "Contact", link: "/contact" },
   ];
 
   const features = [
     {
       icon: BookOpen,
       title: "Vast Digital Library",
-      description: "Access over 50,000+ curated books spanning fiction, non-fiction, self-help, business, science fiction, and academic literature."
+      description:
+        "Access over 50,000+ curated books spanning fiction, non-fiction, self-help, business, science fiction, and academic literature.",
     },
     {
       icon: Search,
       title: "AI-Powered Search",
-      description: "Lightning-fast search engine with intelligent filters. Find books by title, author, genre, or even mood and reading level."
+      description:
+        "Lightning-fast search engine with intelligent filters. Find books by title, author, genre, or even mood and reading level.",
     },
     {
       icon: Star,
       title: "Personalized Curation",
-      description: "Discover hand-picked recommendations based on your reading history. Our experts select the finest literature just for you."
+      description:
+        "Discover hand-picked recommendations based on your reading history. Our experts select the finest literature just for you.",
     },
     {
       icon: Globe,
       title: "Cross-Platform Sync",
-      description: "Seamlessly continue reading across all your devices. Your bookmarks and progress sync automatically in real-time."
+      description:
+        "Seamlessly continue reading across all your devices. Your bookmarks and progress sync automatically in real-time.",
     },
     {
       icon: Filter,
       title: "Advanced Filtering",
-      description: "Sophisticated category system with multi-level filters. Sort by popularity, release date, ratings, or reading time."
+      description:
+        "Sophisticated category system with multi-level filters. Sort by popularity, release date, ratings, or reading time.",
     },
     {
       icon: Shield,
       title: "Zero Commitment",
-      description: "100% free forever. No subscriptions, no trials, no credit cards. Pure unrestricted access to knowledge and entertainment."
+      description:
+        "100% free forever. No subscriptions, no trials, no credit cards. Pure unrestricted access to knowledge and entertainment.",
     },
     {
       icon: Smartphone,
       title: "Mobile-First Design",
-      description: "Pixel-perfect responsive interface optimized for every screen size. Native app experience in your browser."
+      description:
+        "Pixel-perfect responsive interface optimized for every screen size. Native app experience in your browser.",
     },
     {
       icon: Zap,
       title: "Blazing Performance",
-      description: "Sub-second load times powered by edge CDN. Optimized caching ensures instant page transitions and smooth scrolling."
+      description:
+        "Sub-second load times powered by edge CDN. Optimized caching ensures instant page transitions and smooth scrolling.",
     },
     {
       icon: Moon,
       title: "Adaptive Theming",
-      description: "Automatic dark mode with customizable reading themes. Reduce eye strain with adjustable brightness and sepia tones."
-    }
+      description:
+        "Automatic dark mode with customizable reading themes. Reduce eye strain with adjustable brightness and sepia tones.",
+    },
   ];
 
   return (
     <div className="bg-black min-h-screen relative">
       {/* Grid Background */}
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#1f1f1f_1px,transparent_1px),linear-gradient(to_bottom,#1f1f1f_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_0%,#000_70%,transparent_110%)]" />
-    
-      
+
       {/* Navbar */}
       <Navbar>
         <NavBody className="py-0">
@@ -121,10 +141,7 @@ export default function Features() {
             ))}
             <div className="flex w-full flex-col gap-4">
               <Link href="/account" onClick={() => setIsMobileMenuOpen(false)}>
-                <NavbarButton
-                  variant="primary"
-                  className="w-full"
-                >
+                <NavbarButton variant="primary" className="w-full">
                   Account
                 </NavbarButton>
               </Link>
@@ -145,24 +162,25 @@ export default function Features() {
                 </span>
               </h2>
               <p className="text-xl text-gray-300 text-center max-w-2xl mx-auto mt-6">
-                Seamlessly browse, discover, and immerse yourself in thousands of books
-                with our intuitive and beautiful interface
+                Seamlessly browse, discover, and immerse yourself in thousands
+                of books with our intuitive and beautiful interface
               </p>
             </>
           }
         >
           <div className="relative w-full h-full rounded-2xl overflow-hidden border border-cyan-500/20 shadow-[0_0_50px_rgba(6,182,212,0.3)]">
             <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/10 to-teal-500/10"></div>
-            <img
-              src="https://images.unsplash.com/photo-1481627834876-b7833e8f5570?q=80&w=1400"
+            <Image
+              src="/ContainerImg.jpeg"
               alt="NovelVerse Library Interface"
               className="w-full h-full object-cover object-center opacity-90"
               draggable={false}
+              width={10}
+              height={10}
             />
           </div>
         </ContainerScroll>
       </div>
-
 
       {/* Hero Section */}
       <div className="container mx-auto px-4 md:px-8 py-20 relative z-10">
@@ -209,14 +227,14 @@ export default function Features() {
                 >
                   {/* Subtle Glow Effect */}
                   <div className="absolute inset-0 bg-cyan-500/5 opacity-0 group-hover:opacity-100 blur-xl transition-opacity duration-500 rounded-2xl" />
-                  
+
                   {/* Card */}
                   <div className="relative bg-slate-900/50 backdrop-blur border border-slate-800 rounded-2xl p-8 hover:border-cyan-500/30 transition-all duration-300 h-full hover:transform hover:scale-[1.02]">
                     {/* Icon Container */}
                     <div className="w-14 h-14 bg-cyan-500/10 border border-cyan-500/20 rounded-xl flex items-center justify-center mb-5 group-hover:bg-cyan-500/20 group-hover:scale-110 transition-all duration-300">
                       <Icon className="w-7 h-7 text-cyan-400" />
                     </div>
-                    
+
                     {/* Content */}
                     <h3 className="text-2xl font-bold text-white mb-3">
                       {feature.title}
@@ -243,13 +261,14 @@ export default function Features() {
             {/* Background Elements */}
             <div className="absolute top-0 right-0 w-72 h-72 bg-cyan-500/10 rounded-full blur-3xl" />
             <div className="absolute bottom-0 left-0 w-72 h-72 bg-teal-500/10 rounded-full blur-3xl" />
-            
+
             <div className="relative z-10 text-center">
               <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
                 Ready to Transform Your Reading?
               </h2>
               <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
-                Join thousands of readers who&#39;ve discovered their next favorite book on NovelVerse
+                Join thousands of readers who&#39;ve discovered their next
+                favorite book on NovelVerse
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link
@@ -270,7 +289,6 @@ export default function Features() {
         </motion.div>
       </div>
 
-      
       <Footer />
     </div>
   );

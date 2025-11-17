@@ -44,6 +44,7 @@ export default function Category() {
     { name: "About", link: "/about" },
     { name: "Features", link: "/features" },
     { name: "Category", link: "/category" },
+    { name: "Contact", link: "/contact" },
   ];
 
   useEffect(() => {
@@ -95,7 +96,9 @@ export default function Category() {
   }, [selectedCategory, searchQuery, books]);
 
   const categoryGroups = CATEGORIES.slice(1).reduce((acc, category) => {
-    const booksInCategory = filteredBooks.filter((book) => book.category === category);
+    const booksInCategory = filteredBooks.filter(
+      (book) => book.category === category
+    );
     if (booksInCategory.length > 0) {
       acc[category] = booksInCategory;
     }
@@ -147,10 +150,7 @@ export default function Category() {
             ))}
             <div className="flex w-full flex-col gap-4">
               <Link href="/account" onClick={() => setIsMobileMenuOpen(false)}>
-                <NavbarButton
-                  variant="primary"
-                  className="w-full"
-                >
+                <NavbarButton variant="primary" className="w-full">
                   Account
                 </NavbarButton>
               </Link>
@@ -166,7 +166,10 @@ export default function Category() {
 
           {/* Search Bar */}
           <div className="relative w-full md:w-1/2 lg:w-1/3">
-            <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+            <Search
+              className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400"
+              size={20}
+            />
             <input
               type="text"
               placeholder="Search books by title, author, or description..."
@@ -191,10 +194,11 @@ export default function Category() {
             <button
               key={category}
               onClick={() => setSelectedCategory(category)}
-              className={`px-6 py-2 rounded-full font-semibold transition-all duration-200 whitespace-nowrap ${selectedCategory === category
+              className={`px-6 py-2 rounded-full font-semibold transition-all duration-200 whitespace-nowrap ${
+                selectedCategory === category
                   ? "bg-emerald-500 text-white"
                   : "bg-gray-800 text-gray-300 hover:bg-gray-700"
-                }`}
+              }`}
             >
               {category}
             </button>
@@ -205,7 +209,9 @@ export default function Category() {
           <div className="flex flex-col gap-8">
             {[...Array(3)].map((_, sectionIdx) => (
               <div key={sectionIdx}>
-                <h2 className="text-2xl font-bold mb-6 text-white">Loading...</h2>
+                <h2 className="text-2xl font-bold mb-6 text-white">
+                  Loading...
+                </h2>
                 <div className="flex gap-4">
                   {[...Array(5)].map((_, i) => (
                     <div
@@ -229,23 +235,30 @@ export default function Category() {
           <>
             {selectedCategory === "All" && !searchQuery ? (
               <div className="flex flex-col gap-12">
-                {Object.entries(categoryGroups).map(([category, categoryBooks]) => (
-                  <div key={category}>
-                    <h2 className="text-2xl font-bold mb-6 text-white">{category}</h2>
-                    <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide">
-                      {categoryBooks.map((book) => (
-                        <div key={book.id} className="flex-shrink-0 w-[160px]">
-                          <BookCard
-                            id={book.id}
-                            title={book.title}
-                            author={book.author}
-                            coverImage={book.coverImage}
-                          />
-                        </div>
-                      ))}
+                {Object.entries(categoryGroups).map(
+                  ([category, categoryBooks]) => (
+                    <div key={category}>
+                      <h2 className="text-2xl font-bold mb-6 text-white">
+                        {category}
+                      </h2>
+                      <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide">
+                        {categoryBooks.map((book) => (
+                          <div
+                            key={book.id}
+                            className="flex-shrink-0 w-[160px]"
+                          >
+                            <BookCard
+                              id={book.id}
+                              title={book.title}
+                              author={book.author}
+                              coverImage={book.coverImage}
+                            />
+                          </div>
+                        ))}
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  )
+                )}
                 {Object.keys(categoryGroups).length === 0 && (
                   <p className="text-gray-400 text-lg">No books available.</p>
                 )}
@@ -255,8 +268,7 @@ export default function Category() {
                 <h2 className="text-2xl font-bold mb-6 text-white">
                   {searchQuery
                     ? `Search Results`
-                    : `${selectedCategory} (${filteredBooks.length})`
-                  }
+                    : `${selectedCategory} (${filteredBooks.length})`}
                 </h2>
                 {filteredBooks.length > 0 ? (
                   <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
@@ -275,8 +287,7 @@ export default function Category() {
                   <p className="text-gray-400 text-lg">
                     {searchQuery
                       ? `No books found matching "${searchQuery}"`
-                      : "No books found in this category."
-                    }
+                      : "No books found in this category."}
                   </p>
                 )}
               </div>

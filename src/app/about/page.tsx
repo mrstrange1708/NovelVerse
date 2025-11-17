@@ -11,14 +11,13 @@ import {
   MobileNavHeader,
   MobileNavToggle,
   MobileNavMenu,
-  NavbarButton
+  NavbarButton,
 } from "@/components/ui/resizable-navbar";
 import Link from "next/link";
 import { User, BookOpen, Globe, Lightbulb, Shield } from "lucide-react";
 import { useState } from "react";
 import { motion } from "motion/react";
 import { LampContainer } from "@/components/ui/lamp";
-
 
 export default function About() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -27,6 +26,7 @@ export default function About() {
     { name: "About", link: "/about" },
     { name: "Features", link: "/features" },
     { name: "Category", link: "/category" },
+    { name: "Contact", link: "/contact" },
   ];
 
   return (
@@ -70,10 +70,7 @@ export default function About() {
             ))}
             <div className="flex w-full flex-col gap-4">
               <Link href="/account" onClick={() => setIsMobileMenuOpen(false)}>
-                <NavbarButton
-                  variant="primary"
-                  className="w-full"
-                >
+                <NavbarButton variant="primary" className="w-full">
                   Account
                 </NavbarButton>
               </Link>
@@ -94,7 +91,7 @@ export default function About() {
           }}
           className="bg-gradient-to-br from-cyan-200 via-cyan-400 to-teal-400 bg-clip-text text-white text-center text-6xl font-medium tracking-tight text-transparent md:text-7xl"
         >
-          About <br /> 
+          About <br />
           <span className="bg-gradient-to-r from-cyan-300 to-teal-300 bg-clip-text">
             NovelVerse
           </span>
@@ -113,12 +110,16 @@ export default function About() {
             className="text-center mb-20"
           >
             <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
-              Our <span className="bg-gradient-to-r from-cyan-400 to-teal-400 bg-clip-text text-transparent">Mission</span>
+              Our{" "}
+              <span className="bg-gradient-to-r from-cyan-400 to-teal-400 bg-clip-text text-transparent">
+                Mission
+              </span>
             </h2>
             <p className="text-lg md:text-xl text-gray-300 max-w-4xl mx-auto leading-relaxed">
-              NovelVerse is a free, accessible digital library dedicated to providing readers
-              worldwide with high-quality books across various genres. We believe knowledge
-              should be free and available to everyone, regardless of location or financial means.
+              NovelVerse is a free, accessible digital library dedicated to
+              providing readers worldwide with high-quality books across various
+              genres. We believe knowledge should be free and available to
+              everyone, regardless of location or financial means.
             </p>
           </motion.div>
 
@@ -136,9 +137,12 @@ export default function About() {
                 <div className="w-14 h-14 bg-gradient-to-br from-cyan-400/20 to-teal-400/20 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
                   <BookOpen className="w-7 h-7 text-cyan-400" />
                 </div>
-                <h3 className="text-xl font-bold text-white mb-3">Free Access</h3>
+                <h3 className="text-xl font-bold text-white mb-3">
+                  Free Access
+                </h3>
                 <p className="text-gray-400 leading-relaxed">
-                  All books are completely free to read. No subscriptions, no hidden fees.
+                  All books are completely free to read. No subscriptions, no
+                  hidden fees.
                 </p>
               </div>
             </motion.div>
@@ -155,9 +159,12 @@ export default function About() {
                 <div className="w-14 h-14 bg-gradient-to-br from-cyan-400/20 to-teal-400/20 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
                   <Globe className="w-7 h-7 text-cyan-400" />
                 </div>
-                <h3 className="text-xl font-bold text-white mb-3">Global Reach</h3>
+                <h3 className="text-xl font-bold text-white mb-3">
+                  Global Reach
+                </h3>
                 <p className="text-gray-400 leading-relaxed">
-                  Accessible worldwide. Read from anywhere, at any time, on any device.
+                  Accessible worldwide. Read from anywhere, at any time, on any
+                  device.
                 </p>
               </div>
             </motion.div>
@@ -174,9 +181,12 @@ export default function About() {
                 <div className="w-14 h-14 bg-gradient-to-br from-cyan-400/20 to-teal-400/20 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
                   <Lightbulb className="w-7 h-7 text-cyan-400" />
                 </div>
-                <h3 className="text-xl font-bold text-white mb-3">Curated Selection</h3>
+                <h3 className="text-xl font-bold text-white mb-3">
+                  Curated Selection
+                </h3>
                 <p className="text-gray-400 leading-relaxed">
-                  Carefully selected books across multiple categories to suit every reader.
+                  Carefully selected books across multiple categories to suit
+                  every reader.
                 </p>
               </div>
             </motion.div>
@@ -195,7 +205,8 @@ export default function About() {
                 </div>
                 <h3 className="text-xl font-bold text-white mb-3">No Ads</h3>
                 <p className="text-gray-400 leading-relaxed">
-                  Distraction-free reading experience. No advertisements, no interruptions.
+                  Distraction-free reading experience. No advertisements, no
+                  interruptions.
                 </p>
               </div>
             </motion.div>
@@ -212,18 +223,23 @@ export default function About() {
             <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-cyan-500/10 to-teal-500/10 rounded-full blur-3xl"></div>
             <div className="relative z-10">
               <h2 className="text-4xl md:text-5xl font-bold text-white mb-6 text-center">
-                Who <span className="bg-gradient-to-r from-cyan-400 to-teal-400 bg-clip-text text-transparent">We Are</span>
+                Who{" "}
+                <span className="bg-gradient-to-r from-cyan-400 to-teal-400 bg-clip-text text-transparent">
+                  We Are
+                </span>
               </h2>
               <div className="max-w-3xl mx-auto space-y-4 text-center">
                 <p className="text-lg text-gray-300 leading-relaxed">
-                  NovelVerse was founded with a simple vision: to make knowledge and literature
-                  accessible to everyone, everywhere. We believe in the transformative power of
-                  reading and are committed to breaking down barriers to education.
+                  NovelVerse was founded with a simple vision: to make knowledge
+                  and literature accessible to everyone, everywhere. We believe
+                  in the transformative power of reading and are committed to
+                  breaking down barriers to education.
                 </p>
                 <p className="text-lg text-gray-300 leading-relaxed">
-                  Our team of dedicated book lovers curates a diverse collection spanning from
-                  timeless classics to modern bestsellers, ensuring that there&apos;s something for
-                  every reader on their journey through the literary universe.
+                  Our team of dedicated book lovers curates a diverse collection
+                  spanning from timeless classics to modern bestsellers,
+                  ensuring that there&apos;s something for every reader on their
+                  journey through the literary universe.
                 </p>
               </div>
             </div>
@@ -232,7 +248,7 @@ export default function About() {
       </div>
 
       {/* Container Scroll Section */}
-      
+
       <Footer />
     </div>
   );

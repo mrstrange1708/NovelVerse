@@ -25,18 +25,10 @@ export function BooksHero() {
     "https://images.unsplash.com/photo-1495446815901-a7297e633e8d?q=80&w=2000&auto=format&fit=crop",
   ];
   const navItems = [
-    {
-      name: "About",
-      link: "/about",
-    },
-    {
-      name: "Features",
-      link: "/features",
-    },
-    {
-      name: "Category",
-      link: "/category",
-    },
+    { name: "About", link: "/about" },
+    { name: "Features", link: "/features" },
+    { name: "Category", link: "/category" },
+    { name: "Contact", link: "/contact" },
   ];
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   return (

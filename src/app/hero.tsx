@@ -23,19 +23,11 @@ import {
 
 export function HeroSection() {
     const navItems = [
-        {
-            name: "About",
-            link: "/about",
-        },
-        {
-            name: "Features",
-            link: "/features",
-        },
-        {
-            name: "Category",
-            link: "/category",
-        },
-    ];
+    { name: "About", link: "/about" },
+    { name: "Features", link: "/features" },
+    { name: "Category", link: "/category" },
+    { name: "Contact", link: "/contact" },
+  ];
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     return (
         <div className="relative w-full mt-[-40px] p-0">
