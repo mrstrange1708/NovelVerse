@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { Footer } from "@/components/ui/footer";
 import {
   Navbar,
@@ -15,7 +16,6 @@ import {
 } from "@/components/ui/resizable-navbar";
 import { User } from "lucide-react";
 import Link from "next/link";
-import Image from "next/image";
 import { useState, useEffect, useRef } from "react";
 import { motion } from "motion/react";
 import { cn } from "@/lib/utils";
@@ -323,12 +323,13 @@ const SkeletonThree = () => {
       <div className="w-full mx-auto bg-transparent dark:bg-transparent group h-full">
         <div className="flex flex-1 w-full h-full flex-col space-y-2 relative">
           <IconBrandYoutubeFilled className="h-20 w-20 absolute z-10 inset-0 text-red-500 m-auto" />
-          <img
+          <Image
             src="https://images.unsplash.com/photo-1507842217343-583bb7270b66?w=800"
             alt="Reading experience"
             width={800}
             height={800}
             className="h-full w-full aspect-square object-cover object-center rounded-sm blur-none group-hover/image:blur-md transition-all duration-200"
+            unoptimized
           />
         </div>
       </div>
@@ -370,7 +371,7 @@ const Globe = ({ className }: { className?: string }) => {
         { location: [40.7128, -74.006], size: 0.1 },
       ],
 
-      onRender: (state: any) => {
+      onRender: (state: Record<string, unknown>) => {
         state.phi = phi;
         phi += 0.01;
       },

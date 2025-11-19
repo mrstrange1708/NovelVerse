@@ -275,7 +275,7 @@ export const NavbarButton = React.forwardRef<
 
   return (
     <Component
-      ref={ref as any}
+      ref={ref as React.Ref<HTMLAnchorElement> & React.Ref<HTMLButtonElement>}
       {...(isLink ? { href } : {})}
       className={cn(baseStyles, variantStyles[variant], className)}
       {...props}
