@@ -31,6 +31,7 @@ export interface User {
 export interface Book {
     id: string;
     title: string;
+    slug: string;
     author: string;
     description?: string;
     category: string;
@@ -99,15 +100,15 @@ class ApiService {
     async login(data: LoginData): Promise<AuthResponse> {
         const response = await this.api.post('/auth/login', data) as AuthResponse;
         console.log(response);
-        
+
         if (response.token) {
             this.setToken(response.token);
         }
-        
+
         if (response.user) {
             this.setUser(response.user);
         }
-        
+
         return response;
     }
 
@@ -239,6 +240,44 @@ class ApiService {
         if ('data' in response && Array.isArray(response.data)) return response.data;
         if ('books' in response && Array.isArray(response.books)) return response.books;
         return [];
+    }
+    async getBookBySlug(slug: string): Promise<Book | null> {
+        try {
+            const response = await this.api.get(`/book/slug/${slug}`);
+            if (response && response.data) return response.data;
+            return null;
+        } catch (error) {
+            console.error("Error fetching book by slug:", error);
+            return null;
+        }
+
+
+    }
+
+    async getManifest(slug: string): Promise<any | null> {
+        try {
+            const res = await this.api.get(`/book/${slug}/manifest`) as { manifestUrl?: string };
+            if (!res?.manifestUrl) return null;
+
+            const manifestResponse = await fetch(res.manifestUrl);
+            return manifestResponse.json();
+        } catch (error) {
+            console.error("Error fetching manifest:", error);
+            return null;
+        }
+    }
+
+    async updateProgress(userId: string, slug: string, page: number) {
+        try {
+            return await this.api.post(`/book/progress`, {
+                userId,
+                slug,
+                page
+            });
+        } catch (error) {
+            console.error("Error updating progress:", error);
+            return null;
+        }
     }
 }
 

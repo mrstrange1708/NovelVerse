@@ -174,7 +174,6 @@ export default function BookDetailsPage() {
         </MobileNav>
       </Navbar>
 
-
       <div className="container mx-auto px-4 md:px-8 py-26">
         <button
           onClick={() => router.back()}
@@ -261,16 +260,27 @@ export default function BookDetailsPage() {
               )}
             </div>
 
-            <div className="pt-6">
-              <a
-                href={book.pdfUrl || "#"}
-                target="_blank"
-                rel="noopener noreferrer"
+            <div className="pt-6 flex flex-col sm:flex-row gap-4">
+              <button
+                onClick={() => router.push(`/reader/${book.slug}`)}
                 className="inline-flex items-center justify-center gap-3 w-full md:w-auto px-8 py-4 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-semibold transition-all duration-300 hover:scale-105 shadow-lg shadow-blue-500/30"
               >
                 <IconBookDownload size={24} />
                 <span>Read Now</span>
-              </a>
+              </button>
+
+              {book.pdfUrl && (
+                <a
+                  href={book.pdfUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  download
+                  className="inline-flex items-center justify-center gap-3 w-full md:w-auto px-8 py-4 bg-green-600 hover:bg-green-700 text-white rounded-lg font-semibold transition-all duration-300 hover:scale-105 shadow-lg shadow-green-600/30"
+                >
+                  <IconBookDownload size={24} />
+                  <span>Download PDF</span>
+                </a>
+              )}
             </div>
           </div>
         </motion.div>
