@@ -172,14 +172,12 @@ export default function Account() {
             </p>
           </motion.div>
 
-
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
             className="relative overflow-hidden bg-gradient-to-br from-gray-900/80 to-gray-800/50 backdrop-blur-xl border border-gray-700/50 rounded-2xl p-8 mb-8 shadow-2xl"
           >
-
             <div className="absolute -top-24 -right-24 w-48 h-48 bg-blue-500/20 rounded-full blur-3xl" />
             <div className="absolute -bottom-24 -left-24 w-48 h-48 bg-cyan-500/20 rounded-full blur-3xl" />
 
@@ -191,7 +189,6 @@ export default function Account() {
                   {user.lastName.charAt(0)}
                 </div>
               </div>
-
 
               <div className="flex-1 text-center md:text-left">
                 <h2 className="text-3xl font-bold text-white mb-1">
@@ -215,7 +212,6 @@ export default function Account() {
               </div>
             </div>
           </motion.div>
-
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
             {stats.map((stat, index) => {
@@ -253,7 +249,6 @@ export default function Account() {
               );
             })}
           </div>
-
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -298,6 +293,8 @@ export default function Account() {
                             <img
                               src={book.coverImage}
                               alt={book.title}
+                              width={48}
+                              height={64}
                               className="w-12 h-16 object-cover rounded-lg"
                             />
                           ) : (
@@ -351,7 +348,6 @@ export default function Account() {
               </div>
             )}
           </motion.div>
-
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}

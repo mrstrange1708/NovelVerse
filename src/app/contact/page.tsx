@@ -13,9 +13,8 @@ import {
   MobileNavHeader,
   MobileNavToggle,
   MobileNavMenu,
-  NavbarButton,
 } from "@/components/ui/resizable-navbar";
-import { Mail, MessageSquare, Phone, MapPin } from "lucide-react";
+import { Mail, MessageSquare, Phone } from "lucide-react";
 
 export default function ContactPage() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -55,7 +54,6 @@ export default function ContactPage() {
           <NavItems items={navItems} />
           <div className="flex items-center gap-2 z-99">
             <NavbarIconButton href="/account" ariaLabel="Account" />
-            
           </div>
         </NavBody>
         <MobileNav>
@@ -84,7 +82,6 @@ export default function ContactPage() {
         </MobileNav>
       </Navbar>
 
-
       <div className="h-[40rem] w-full bg-black flex flex-col items-center justify-center overflow-hidden">
         <h1 className="md:text-7xl text-3xl lg:text-9xl font-bold text-center text-white relative z-20">
           Contact Us
@@ -95,7 +92,6 @@ export default function ContactPage() {
           <div className="absolute inset-x-60 top-0 bg-gradient-to-r from-transparent via-sky-500 to-transparent h-[5px] w-1/4 blur-sm" />
           <div className="absolute inset-x-60 top-0 bg-gradient-to-r from-transparent via-sky-500 to-transparent h-px w-1/4" />
 
-
           <SparklesCore
             background="transparent"
             minSize={0.4}
@@ -105,11 +101,9 @@ export default function ContactPage() {
             particleColor="#FFFFFF"
           />
 
-
           <div className="absolute inset-0 w-full h-full bg-black [mask-image:radial-gradient(350px_200px_at_top,transparent_20%,white)]"></div>
         </div>
       </div>
-
 
       <div className="max-w-7xl mx-auto px-4 py-16 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
@@ -145,8 +139,6 @@ export default function ContactPage() {
                 </div>
               </div>
 
-              
-
               <div className="flex items-start space-x-4">
                 <div className="bg-slate-800 p-3 rounded-lg">
                   <MessageSquare className="w-6 h-6 text-indigo-400" />
@@ -160,7 +152,6 @@ export default function ContactPage() {
               </div>
             </div>
           </div>
-
 
           <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-2xl p-8 shadow-2xl">
             <form onSubmit={handleSubmit} className="space-y-6">
@@ -250,7 +241,6 @@ export default function ContactPage() {
           </div>
         </div>
       </div>
-
 
       <Footer />
     </div>
