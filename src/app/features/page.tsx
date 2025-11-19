@@ -22,6 +22,7 @@ import { cn } from "@/lib/utils";
 import createGlobe from "cobe";
 import { IconBrandYoutubeFilled } from "@tabler/icons-react";
 import { ContainerScroll } from "@/components/ui/container-scroll-animation";
+import React from "react";
 
 export default function Features() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -78,7 +79,6 @@ export default function Features() {
           </div>
         </NavBody>
 
-
         <MobileNav>
           <MobileNavHeader>
             <NavbarLogo />
@@ -113,7 +113,6 @@ export default function Features() {
         </MobileNav>
       </Navbar>
 
-
       <div className="pb-10 relative z-10">
         <ContainerScroll
           titleComponent={
@@ -144,7 +143,6 @@ export default function Features() {
           </div>
         </ContainerScroll>
       </div>
-
 
       <div className="relative z-20 py-10 lg:py-20 max-w-7xl mx-auto">
         <div className="px-8">
@@ -242,6 +240,13 @@ const SkeletonTwo = () => {
     "https://images.unsplash.com/photo-1543002588-bfa74002ed7e?w=800",
   ];
 
+  // Generate consistent rotation values to avoid hydration mismatch
+  const rotations = React.useMemo(
+    () => images.map(() => Math.random() * 20 - 10),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    []
+  );
+
   const imageVariants = {
     whileHover: {
       scale: 1.1,
@@ -263,7 +268,7 @@ const SkeletonTwo = () => {
             variants={imageVariants}
             key={"images-first" + idx}
             style={{
-              rotate: Math.random() * 20 - 10,
+              rotate: rotations[idx],
             }}
             whileHover="whileHover"
             whileTap="whileTap"
@@ -284,7 +289,7 @@ const SkeletonTwo = () => {
           <motion.div
             key={"images-second" + idx}
             style={{
-              rotate: Math.random() * 20 - 10,
+              rotate: rotations[idx],
             }}
             variants={imageVariants}
             whileHover="whileHover"

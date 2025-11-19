@@ -4,7 +4,7 @@ import Link from "next/link";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
-import { IconBrandGoogle, IconArrowLeft } from "@tabler/icons-react";
+import { IconArrowLeft } from "@tabler/icons-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useRouter } from "next/navigation";
 import { apiService } from "@/lib/api";
@@ -17,7 +17,7 @@ export default function SignupFormDemo() {
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  const { login } = useAuth(); 
+  const { login } = useAuth();
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -26,7 +26,12 @@ export default function SignupFormDemo() {
     setIsLoading(true);
 
     try {
-      const response = await apiService.register({ firstName, lastName, email, password });
+      const response = await apiService.register({
+        firstName,
+        lastName,
+        email,
+        password,
+      });
       console.log("Signup success:", response);
 
       if (response.token) {
@@ -37,7 +42,6 @@ export default function SignupFormDemo() {
         }
       }
 
-
       router.push("/home");
     } catch (err: unknown) {
       if (err instanceof Error) {
@@ -46,7 +50,6 @@ export default function SignupFormDemo() {
         setError("Signup failed. Please try again.");
       }
       console.error("Signup failed:", err);
-
     } finally {
       setIsLoading(false);
     }
@@ -165,4 +168,8 @@ const LabelInputContainer = ({
 }: {
   children: React.ReactNode;
   className?: string;
-}) => <div className={cn("flex w-full flex-col space-y-2", className)}>{children}</div>;
+}) => (
+  <div className={cn("flex w-full flex-col space-y-2", className)}>
+    {children}
+  </div>
+);

@@ -1,6 +1,7 @@
 "use client";
 
 import HTMLFlipBook from "react-pageflip";
+import Image from "next/image";
 import {
   useEffect,
   useState,
@@ -29,6 +30,7 @@ export interface PageFlipBookRef {
 
 const PageFlipBook = forwardRef<PageFlipBookRef, Props>(
   ({ manifest, onPageChange }, ref) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const bookRef = useRef<any>(null);
     const [pages, setPages] = useState<Page[]>([]);
     const [zoom, setZoom] = useState(1);
@@ -55,7 +57,7 @@ const PageFlipBook = forwardRef<PageFlipBookRef, Props>(
       },
     }));
 
-    function handleFlip(e: any) {
+    function handleFlip(e: { data: number }) {
       onPageChange(e.data + 1);
     }
 
@@ -99,12 +101,14 @@ const PageFlipBook = forwardRef<PageFlipBookRef, Props>(
             {pages.map((p) => (
               <div
                 key={p.page}
-                className="bg-white flex justify-center items-start overflow-hidden"
+                className="bg-white flex justify-center items-start overflow-hidden relative"
               >
-                <img
+                <Image
                   src={p.image}
                   alt={`Page ${p.page}`}
-                  className="w-full h-full object-contain"
+                  fill
+                  className="object-contain"
+                  unoptimized
                 />
               </div>
             ))}

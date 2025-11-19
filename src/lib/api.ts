@@ -254,7 +254,7 @@ class ApiService {
 
     }
 
-    async getManifest(slug: string): Promise<any | null> {
+    async getManifest(slug: string): Promise<{ pages: Array<{ page: number; image: string }> } | null> {
         try {
             const res = await this.api.get(`/book/${slug}/manifest`) as { manifestUrl?: string };
             if (!res?.manifestUrl) return null;

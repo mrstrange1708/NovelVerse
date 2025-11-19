@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useRef } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { apiService } from "@/lib/api";
+import { apiService, Book } from "@/lib/api";
 import { IconArrowLeft } from "@tabler/icons-react";
 
 import PageFlipBook, {
@@ -11,12 +11,16 @@ import PageFlipBook, {
 import ReaderToolbar from "@/components/reader/ReaderToolbar";
 import LoadingScreen from "@/components/reader/LoadingScreen";
 
+interface Manifest {
+  pages: Array<{ page: number; image: string }>;
+}
+
 export default function ReaderPage() {
   const { slug } = useParams();
   const router = useRouter();
   const bookFlipRef = useRef<PageFlipBookRef>(null);
-  const [book, setBook] = useState<any>(null);
-  const [manifest, setManifest] = useState<any>(null);
+  const [book, setBook] = useState<Book | null>(null);
+  const [manifest, setManifest] = useState<Manifest | null>(null);
   const [loading, setLoading] = useState(true);
 
   const [currentPage, setCurrentPage] = useState(1);
