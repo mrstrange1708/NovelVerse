@@ -28,11 +28,13 @@ import { motion } from "motion/react";
 import { useRouter } from "next/navigation";
 import { User as UserIcon } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
+import { toast } from "react-toastify";
+import Image from "next/image";
 
 export default function Account() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const router = useRouter();
-  const { logout, user, isAuthenticated, isLoading } = useAuth();
+  const { logout, user, isAuthenticated, isLoading, refreshUser } = useAuth();
 
   const navItems = [
     { name: "About", link: "/about" },
@@ -41,11 +43,21 @@ export default function Account() {
     { name: "Contact", link: "/contact" },
   ];
 
+  // Refresh user data when component mounts
   useEffect(() => {
-    if (!isLoading && (!isAuthenticated || !user)) {
+    const initUser = async () => {
+      if (isAuthenticated && !user) {
+        await refreshUser();
+      }
+    };
+    initUser();
+  }, [isAuthenticated, user, refreshUser]);
+
+  useEffect(() => {
+    if (!isLoading && !isAuthenticated) {
       router.replace("/login");
     }
-  }, [isAuthenticated, user, router, isLoading]);
+  }, [isAuthenticated, router, isLoading]);
 
   if (isLoading || !user) {
     return (
@@ -357,8 +369,18 @@ export default function Account() {
           >
             <button
               onClick={() => {
-                logout();
-                router.replace("/login");
+                toast.info("Signing out...", {
+                  position: "top-right",
+                  autoClose: 1500,
+                });
+                setTimeout(() => {
+                  logout();
+                  toast.success("Signed out successfully!", {
+                    position: "top-right",
+                    autoClose: 2000,
+                  });
+                  router.replace("/login");
+                }, 500);
               }}
               className="inline-flex items-center gap-2 px-8 py-3 bg-red-500/10 hover:bg-red-500/20 border border-red-500/30 hover:border-red-500/50 text-red-400 hover:text-red-300 rounded-xl transition-all duration-300 hover:scale-105 group"
             >

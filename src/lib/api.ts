@@ -19,6 +19,11 @@ export interface AuthResponse {
     user?: User;
 }
 
+export interface userProfileResponse {
+    scuccess: boolean;
+    user: User;
+}
+
 export interface User {
     id: number;
     firstName: string;
@@ -66,7 +71,7 @@ class ApiService {
             withCredentials: true,
         });
 
-        // Attach Authorization header when token exists
+
         this.api.interceptors.request.use(
             (config: InternalAxiosRequestConfig) => {
                 const token = this.getToken();
@@ -78,14 +83,13 @@ class ApiService {
             (error) => Promise.reject(error)
         );
 
-        // Normalize API errors and auto-logout on 401
         this.api.interceptors.response.use(
             (response) => response.data,
             (error: AxiosError<ApiError>) => {
-                if (error.response?.status === 401) {
+                if (error.response?.status === 401 && error.config?.url !== '/auth/me') {
                     this.removeToken();
-                    this.removeUser();
                 }
+
                 const message = error.response?.data?.error || error.message;
                 return Promise.reject(new Error(message));
             }
@@ -105,10 +109,6 @@ class ApiService {
             this.setToken(response.token);
         }
 
-        if (response.user) {
-            this.setUser(response.user);
-        }
-
         return response;
     }
 
@@ -119,22 +119,38 @@ class ApiService {
     }
 
     // Handle Google OAuth callback token from URL
-    handleGoogleCallback(): boolean {
-        if (typeof window === 'undefined') return false;
+    async handleGoogleCallback(): Promise<User | null> {
+        if (typeof window === 'undefined') return null;
         const urlParams = new URLSearchParams(window.location.search);
         const token = urlParams.get('token');
         if (token) {
             this.setToken(token);
-            // Clean up URL by removing token parameter
             window.history.replaceState({}, document.title, window.location.pathname);
-            return true;
+            const user = await this.getCurrentUser();
+            return user;
         }
-        return false;
+        return null;
+    }
+
+    async getCurrentUser(): Promise<User | null> {
+        const token = this.getToken();
+        if (!token) return null;
+
+        try {
+            const response = await this.api.get('/auth/me') as userProfileResponse;
+            if (response.user) {
+                return response.user;
+            }
+            return null;
+        } catch (error) {
+            console.error('Error fetching current user:', error);
+            this.removeToken();
+            return null;
+        }
     }
 
     logout(): void {
         this.removeToken();
-        this.removeUser();
     }
 
     // Token management (with SSR safety)
@@ -154,35 +170,6 @@ class ApiService {
     removeToken(): void {
         if (typeof window !== 'undefined') {
             localStorage.removeItem('authToken');
-        }
-    }
-
-
-    setUser(user: User): void {
-        if (typeof window !== 'undefined') {
-            localStorage.setItem('user', JSON.stringify(user));
-        }
-    }
-
-    getUser(): User | null {
-        if (typeof window !== 'undefined') {
-            const userStr = localStorage.getItem('user');
-            if (userStr) {
-                try {
-                    return JSON.parse(userStr) as User;
-                } catch (error) {
-                    console.error('Failed to parse user data:', error);
-                    this.removeUser();
-                    return null;
-                }
-            }
-        }
-        return null;
-    }
-
-    removeUser(): void {
-        if (typeof window !== 'undefined') {
-            localStorage.removeItem('user');
         }
     }
 

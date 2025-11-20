@@ -8,6 +8,8 @@ import { IconBrandGoogle, IconArrowLeft } from "@tabler/icons-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useRouter } from "next/navigation";
 import { apiService } from "../../lib/api";
+import { toast } from "react-toastify";
+import { LoaderOne } from "@/components/ui/loader";
 
 export default function LoginFormDemo() {
   const [email, setEmail] = useState("");
@@ -21,24 +23,39 @@ export default function LoginFormDemo() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError("");
-    
+    setIsLoading(true);
+
     try {
       await login(email, password);
-      setIsLoading(true);
-      router.push("/home"); 
+      toast.success("Login successful! Redirecting...", {
+        position: "top-right",
+        autoClose: 2000,
+      });
+      setTimeout(() => {
+        router.push("/home");
+      }, 1000);
     } catch (err: unknown) {
-      if (err instanceof Error) {
-        setError(err.message);
-      } else {
-        setError("Failed to login. Please check your credentials.");
-      }
+      setIsLoading(false);
+      const errorMessage =
+        err instanceof Error
+          ? err.message
+          : "Failed to login. Please check your credentials.";
+      setError(errorMessage);
+      toast.error(errorMessage, {
+        position: "top-right",
+        autoClose: 4000,
+      });
     }
   };
 
   return (
     <div className="shadow-input mx-auto w-full max-w-md rounded-none bg-white p-4 md:rounded-2xl md:p-8 dark:bg-black z-100">
       <div className="mb-2">
-        <Link href="/" aria-label="Back to home" className="inline-flex items-center gap-2 text-neutral-600 hover:text-neutral-900 dark:text-neutral-300 dark:hover:text-white">
+        <Link
+          href="/"
+          aria-label="Back to home"
+          className="inline-flex items-center gap-2 text-neutral-600 hover:text-neutral-900 dark:text-neutral-300 dark:hover:text-white"
+        >
           <IconArrowLeft className="h-4 w-4" />
           <span className="text-sm">Back</span>
         </Link>
@@ -57,7 +74,6 @@ export default function LoginFormDemo() {
       )}
 
       <form className="my-8" onSubmit={handleSubmit}>
-
         <LabelInputContainer className="mb-4">
           <Label htmlFor="email">Email Address</Label>
           <Input
@@ -82,24 +98,36 @@ export default function LoginFormDemo() {
         </LabelInputContainer>
 
         <button
-          className="group/btn relative block h-10 w-full rounded-md bg-gradient-to-br from-black to-neutral-600 font-medium text-white shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:bg-zinc-800 dark:from-zinc-900 dark:to-zinc-900 dark:shadow-[0px_1px_0px_0px_#27272a_inset,0px_-1px_0px_0px_#27272a_inset]"
+          className="group/btn relative block h-10 w-full rounded-md bg-gradient-to-br from-black to-neutral-600 font-medium text-white shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:bg-zinc-800 dark:from-zinc-900 dark:to-zinc-900 dark:shadow-[0px_1px_0px_0px_#27272a_inset,0px_-1px_0px_0px_#27272a_inset] disabled:opacity-50 disabled:cursor-not-allowed"
           type="submit"
           disabled={isLoading}
         >
-          {isLoading ? "Logging in..." : "Login"} &rarr;
+          {isLoading ? (
+            <span className="flex items-center justify-center gap-2">
+              <LoaderOne />
+            </span>
+          ) : (
+            <span>Login &rarr;</span>
+          )}
           <BottomGradient />
         </button>
 
         <div className="my-8 h-[1px] w-full bg-gradient-to-r from-transparent via-neutral-300 to-transparent dark:via-neutral-700" />
 
         <div className="flex flex-col space-y-4">
-          <p
-            className="text-center m-2 mt-[-10px]"
-          >Or with </p>
+          <p className="text-center m-2 mt-[-10px]">Or with </p>
           <button
             className="group/btn shadow-input relative flex h-10 w-full items-center justify-start space-x-2 rounded-md bg-gray-50 px-4 font-medium text-black dark:bg-zinc-900 dark:shadow-[0px_0px_1px_1px_#262626]"
-            type="submit"
-            onClick={() => apiService.loginWithGoogle()}
+            type="button"
+            onClick={() => {
+              toast.info("Redirecting to Google login...", {
+                position: "top-right",
+                autoClose: 2000,
+              });
+              setTimeout(() => {
+                apiService.loginWithGoogle();
+              }, 500);
+            }}
           >
             <IconBrandGoogle className="h-4 w-4 text-neutral-800 dark:text-neutral-300" />
             <span className="text-sm text-neutral-700 dark:text-neutral-300">
@@ -111,12 +139,14 @@ export default function LoginFormDemo() {
           <div className="text-center mt-4">
             <p className="text-sm text-neutral-600 dark:text-neutral-400">
               Don&apos;t have an account?{" "}
-              <Link href="/signin" className="text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300">
+              <Link
+                href="/signin"
+                className="text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300"
+              >
                 Sign in here
               </Link>
             </p>
           </div>
-
         </div>
       </form>
     </div>
