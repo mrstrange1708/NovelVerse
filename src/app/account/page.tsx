@@ -30,6 +30,7 @@ import { User as UserIcon } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "react-toastify";
 import Image from "next/image";
+import { LoaderOne } from "@/components/ui/loader";
 
 export default function Account() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -43,7 +44,7 @@ export default function Account() {
     { name: "Contact", link: "/contact" },
   ];
 
-  // Refresh user data when component mounts
+
   useEffect(() => {
     const initUser = async () => {
       if (isAuthenticated && !user) {
@@ -67,8 +68,7 @@ export default function Account() {
           animate={{ opacity: 1, scale: 1 }}
           className="flex flex-col items-center gap-4"
         >
-          <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin" />
-          <p className="text-white text-lg">Loading your profile...</p>
+          <LoaderOne />
         </motion.div>
       </div>
     );
