@@ -15,7 +15,6 @@ import {
 } from "@/components/ui/resizable-navbar";
 import {
   IconBook,
-  IconSettings,
   IconLogout,
   IconTrendingUp,
   IconAward,
@@ -29,11 +28,15 @@ import { useRouter } from "next/navigation";
 import { User as UserIcon } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "react-toastify";
-import Image from "next/image";
 import { LoaderOne } from "@/components/ui/loader";
+import { BookCard } from "@/components/ui/book-card";
+import { ReadingHeatmap } from "@/components/ui/ReadingHeatmap";
+import { apiService, HeatmapData } from "@/lib/api";
 
 export default function Account() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [heatmapData, setHeatmapData] = useState<HeatmapData[]>([]);
+  const [totalBooks, setTotalBooks] = useState(0);
   const router = useRouter();
   const { logout, user, isAuthenticated, isLoading, refreshUser } = useAuth();
 
@@ -43,6 +46,27 @@ export default function Account() {
     { name: "Category", link: "/category" },
     { name: "Contact", link: "/contact" },
   ];
+
+  // Load heatmap data and total books
+  useEffect(() => {
+    const loadData = async () => {
+      if (isAuthenticated) {
+        try {
+          const [heatmap, books] = await Promise.all([
+            apiService.getReadingHeatmap(),
+            apiService.getBooks()
+          ]);
+          setHeatmapData(heatmap);
+          if (Array.isArray(books)) {
+            setTotalBooks(books.length);
+          }
+        } catch (error) {
+          console.error("Error fetching data:", error);
+        }
+      }
+    };
+    loadData();
+  }, [isAuthenticated]);
 
 
   useEffect(() => {
@@ -74,7 +98,9 @@ export default function Account() {
     );
   }
 
-  const recentBooks = user.readBooks?.slice(-3).reverse() || [];
+  const continueReading = user.continueReading || [];
+  // Use continueReading for the "Recently Read" section as requested
+  const recentBooks = continueReading;
 
   const stats = [
     {
@@ -86,17 +112,17 @@ export default function Account() {
     },
     {
       label: "Reading Streak",
-      value: "7 days",
+      value: `${user.readingStreak || 0} days`,
       icon: IconTrendingUp,
       color: "cyan",
       description: "Keep it up!",
     },
     {
       label: "Total Books",
-      value: user.readBooks?.length || 0,
+      value: totalBooks,
       icon: IconAward,
       color: "indigo",
-      description: "In your library",
+      description: "Available in library",
     },
   ];
 
@@ -210,17 +236,7 @@ export default function Account() {
                   <span className="w-2 h-2 bg-blue-500 rounded-full animate-pulse" />
                   {user.email}
                 </p>
-                <p className="text-blue-400 text-sm mb-6">Member since 2024</p>
-
-                <div className="flex flex-wrap gap-3 justify-center md:justify-start">
-                  <Link
-                    href="/settings"
-                    className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-500/20 to-cyan-500/20 hover:from-blue-500/30 hover:to-cyan-500/30 border border-blue-500/30 text-blue-300 rounded-xl transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-blue-500/20"
-                  >
-                    <IconSettings size={18} />
-                    <span className="font-medium">Edit Profile</span>
-                  </Link>
-                </div>
+                <p className="text-blue-400 text-sm mb-6">Member since 2025</p>
               </div>
             </div>
           </motion.div>
@@ -262,11 +278,31 @@ export default function Account() {
             })}
           </div>
 
+          {/* Reading Heatmap */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.3 }}
-            className="bg-gradient-to-br from-gray-900/80 to-gray-800/50 backdrop-blur-xl border border-gray-700/50 rounded-2xl p-8 shadow-2xl"
+            transition={{ duration: 0.5, delay: 0.4 }}
+            className="bg-gradient-to-br from-gray-900/80 to-gray-800/50 backdrop-blur-xl border border-gray-700/50 rounded-2xl p-8 shadow-2xl mb-8"
+          >
+            <div className="mb-6">
+              <h2 className="text-2xl font-bold text-white mb-1 flex items-center gap-2">
+                <IconTrendingUp className="text-blue-400" size={28} />
+                Reading Activity
+              </h2>
+              <p className="text-gray-400 text-sm">
+                Your reading journey over the past year
+              </p>
+            </div>
+
+            <ReadingHeatmap data={heatmapData} />
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.5 }}
+            className="bg-gradient-to-br from-gray-900/80 to-gray-800/50 backdrop-blur-xl border border-gray-700/50 rounded-2xl p-8 shadow-2xl z-0"
           >
             <div className="flex items-center justify-between mb-6">
               <div>
@@ -290,47 +326,16 @@ export default function Account() {
             </div>
 
             {recentBooks.length > 0 ? (
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {recentBooks.map((book, index) => (
-                  <motion.div
-                    key={book.id}
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ delay: index * 0.1 }}
-                  >
-                    <Link href={`/book/${book.id}`} className="block group">
-                      <div className="bg-gray-800/50 hover:bg-gray-800 border border-gray-700/50 rounded-xl p-5 transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/10 hover:scale-105 hover:border-blue-500/30">
-                        <div className="flex items-start gap-3">
-                          {book.coverImage ? (
-                            <img
-                              src={book.coverImage}
-                              alt={book.title}
-                              width={48}
-                              height={64}
-                              className="w-12 h-16 object-cover rounded-lg"
-                            />
-                          ) : (
-                            <div className="w-12 h-16 bg-gradient-to-br from-blue-500/20 to-cyan-500/20 rounded-lg flex items-center justify-center">
-                              <IconBook className="text-blue-400" size={24} />
-                            </div>
-                          )}
-                          <div className="flex-1 min-w-0">
-                            <h3 className="text-white font-semibold group-hover:text-blue-300 transition-colors truncate mb-1">
-                              {book.title}
-                            </h3>
-                            <p className="text-gray-400 text-sm truncate mb-2">
-                              {book.author}
-                            </p>
-                            {book.category && (
-                              <span className="inline-block text-xs text-blue-400 font-medium px-2 py-1 bg-blue-500/10 border border-blue-500/20 rounded-md">
-                                {book.category}
-                              </span>
-                            )}
-                          </div>
-                        </div>
-                      </div>
-                    </Link>
-                  </motion.div>
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
+                {recentBooks.map((book) => (
+                  <div key={book.id} className="transform hover:scale-105 transition-transform duration-300">
+                    <BookCard
+                      id={book.id}
+                      title={book.title}
+                      author={book.author}
+                      coverImage={book.coverImage}
+                    />
+                  </div>
                 ))}
               </div>
             ) : (

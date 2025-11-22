@@ -31,6 +31,8 @@ export interface User {
     email: string;
     booksRead: number;
     readBooks: Book[];
+    continueReading?: ContinueReadingBook[];
+    readingStreak?: number;
 }
 
 export interface Book {
@@ -50,6 +52,37 @@ export interface Book {
     readers: unknown[];
     createdAt: string;
     updatedAt: string;
+}
+
+export interface ReadingProgress {
+    id: string;
+    userId: string;
+    bookId: string;
+    currentPage: number;
+    totalPages: number;
+    progressPercent: number;
+    lastReadAt: string;
+    isCompleted: boolean;
+    completedAt?: string;
+    book?: Book;
+}
+
+export interface ContinueReadingBook extends Book {
+    currentPage: number;
+    totalPages: number;
+    progressPercent: number;
+    lastReadAt: string;
+}
+
+export interface ReadingStreak {
+    currentStreak: number;
+    totalPagesRead: number;
+    lastReadDate: string | null;
+}
+
+export interface HeatmapData {
+    date: string;
+    pagesRead: number;
 }
 
 interface ApiError {
@@ -254,15 +287,93 @@ class ApiService {
         }
     }
 
-    async updateProgress(userId: string, slug: string, page: number) {
+    async updateProgress(userId: string, slug: string, currentPage: number, totalPages: number) {
         try {
             return await this.api.post(`/book/progress`, {
                 userId,
                 slug,
-                page
+                currentPage,
+                totalPages
             });
         } catch (error) {
             console.error("Error updating progress:", error);
+            return null;
+        }
+    }
+
+    // Reading Progress Methods
+    async getReadingProgress(): Promise<ReadingProgress[]> {
+        try {
+            const response = await this.api.get('/reading/progress') as { data?: ReadingProgress[] };
+            return response.data || [];
+        } catch (error) {
+            console.error("Error fetching reading progress:", error);
+            return [];
+        }
+    }
+
+    async getBookProgress(bookId: string): Promise<ReadingProgress | null> {
+        try {
+            const response = await this.api.get(`/reading/progress/${bookId}`) as { data?: ReadingProgress };
+            return response.data || null;
+        } catch (error) {
+            console.error("Error fetching book progress:", error);
+            return null;
+        }
+    }
+
+    async getContinueReading(limit: number = 5): Promise<ContinueReadingBook[]> {
+        try {
+            const response = await this.api.get('/reading/continue', {
+                params: { limit }
+            }) as { data?: ContinueReadingBook[] };
+
+            return response.data || [];
+        } catch (error) {
+            console.error("Error fetching continue reading:", error);
+            return [];
+        }
+    }
+
+
+    async getCompletedBooks(): Promise<Book[]> {
+        try {
+            const response = await this.api.get('/reading/completed') as { data?: Book[] };
+            return response.data || [];
+        } catch (error) {
+            console.error("Error fetching completed books:", error);
+            return [];
+        }
+    }
+
+    async getReadingStreak(): Promise<ReadingStreak> {
+        try {
+            const response = await this.api.get('/reading/streak') as { data?: ReadingStreak };
+            return response.data || { currentStreak: 0, totalPagesRead: 0, lastReadDate: null };
+        } catch (error) {
+            console.error("Error fetching reading streak:", error);
+            return { currentStreak: 0, totalPagesRead: 0, lastReadDate: null };
+        }
+    }
+
+    async getReadingHeatmap(year: number = new Date().getFullYear()): Promise<HeatmapData[]> {
+        try {
+            const response = await this.api.get(`/reading/heatmap/${year}`) as { data?: HeatmapData[] };
+            return response.data || [];
+        } catch (error) {
+            console.error("Error fetching reading heatmap:", error);
+            return [];
+        }
+    }
+
+    async trackBookOpen(userId: string, bookId: string) {
+        try {
+            return await this.api.post('/reading/track-open', {
+                userId,
+                bookId
+            });
+        } catch (error) {
+            console.error("Error tracking book open:", error);
             return null;
         }
     }

@@ -33,7 +33,7 @@ export function BookCard({ id, title, author, coverImage }: BookCardProps) {
           ) : (
             <div className="w-full h-full bg-gradient-to-br from-purple-900 to-blue-900 flex items-center justify-center">
               <div className="text-white text-4xl font-bold opacity-50">
-                {title.charAt(0)}
+                {(title || "?").charAt(0)}
               </div>
             </div>
           )}

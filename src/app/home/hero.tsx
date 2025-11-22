@@ -17,6 +17,9 @@ import {
 } from "@/components/ui/resizable-navbar";
 import { User as UserIcon } from "lucide-react";
 import { BooksSection } from "@/components/ui/books-section";
+import { useAuth } from "@/contexts/AuthContext";
+import { BookCard } from "@/components/ui/book-card";
+import { IconBook } from "@tabler/icons-react";
 
 export function BooksHero() {
   const images = [
@@ -31,10 +34,12 @@ export function BooksHero() {
     { name: "Contact", link: "/contact" },
   ];
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { user, isAuthenticated } = useAuth();
+  const continueReading = user?.continueReading || [];
+
   return (
     <div className="relative w-full mt-[-40px] p-0">
       <Navbar>
-
         <NavBody className="py-0">
           <NavbarLogo />
           <NavItems items={navItems} />
@@ -108,6 +113,29 @@ export function BooksHero() {
           </Link>
         </motion.div>
       </ImagesSlider>
+
+      {/* Continue Reading Section */}
+      {isAuthenticated && continueReading.length > 0 && (
+        <div className="container mx-auto px-8 py-12">
+          <h2 className="text-2xl font-bold mb-6 text-white flex items-center gap-2">
+            <IconBook className="text-blue-400" size={28} />
+            Continue Reading
+          </h2>
+          <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide">
+            {continueReading.map((book) => (
+              <div key={book.id} className="flex-shrink-0 w-[160px]">
+                <BookCard
+                  id={book.id}
+                  title={book.title}
+                  author={book.author}
+                  coverImage={book.coverImage}
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
       <div className="container mx-auto px-8 py-12">
         <BooksSection title="Featured Books" showFeatured={true} />
         <BooksSection title="Popular Books" showFeatured={false} />

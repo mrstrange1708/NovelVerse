@@ -19,14 +19,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUserState] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [initializationComplete, setInitializationComplete] = useState(false);
 
   // Initial auth check on mount
   useEffect(() => {
     const initAuth = async () => {
       try {
         const token = apiService.getToken();
-        
+
         if (token) {
           const currentUser = await apiService.getCurrentUser();
           if (currentUser) {
@@ -45,7 +44,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         setIsAuthenticated(false);
       } finally {
         setIsLoading(false);
-        setInitializationComplete(true);
       }
     };
 

@@ -4,6 +4,8 @@ import { useEffect, useState, useRef } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { apiService, Book } from "@/lib/api";
 import { IconArrowLeft } from "@tabler/icons-react";
+import { toast } from "react-toastify";
+import { useAuth } from "@/contexts/AuthContext";
 
 import PageFlipBook, {
   PageFlipBookRef,
@@ -18,13 +20,22 @@ interface Manifest {
 export default function ReaderPage() {
   const { slug } = useParams();
   const router = useRouter();
+  const { user } = useAuth();
   const bookFlipRef = useRef<PageFlipBookRef>(null);
   const [book, setBook] = useState<Book | null>(null);
   const [manifest, setManifest] = useState<Manifest | null>(null);
   const [loading, setLoading] = useState(true);
-
   const [currentPage, setCurrentPage] = useState(1);
+  const [isSaving, setIsSaving] = useState(false);
+  const saveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
+  // Refs to hold latest state for cleanup function and callbacks
+  const stateRef = useRef({ user, book, manifest, currentPage });
+  useEffect(() => {
+    stateRef.current = { user, book, manifest, currentPage };
+  }, [user, book, manifest, currentPage]);
+
+  // Load book and saved progress
   useEffect(() => {
     async function load() {
       if (!slug || Array.isArray(slug)) return;
@@ -35,10 +46,88 @@ export default function ReaderPage() {
 
       setBook(b);
       setManifest(m);
+
+      // Track book open for streak counting
+      if (user && b) {
+        apiService.trackBookOpen(user.id.toString(), b.id);
+      }
+
+      // Load saved progress if user is logged in
+      if (user && b) {
+        const progress = await apiService.getBookProgress(b.id);
+        if (progress && progress.currentPage > 1) {
+          setCurrentPage(progress.currentPage);
+          toast.info(`Resuming from page ${progress.currentPage}`, {
+            position: "top-right",
+            autoClose: 2000,
+          });
+        }
+      }
+
       setLoading(false);
     }
     load();
-  }, [slug]);
+  }, [slug, user]);
+
+  // Save progress function
+  const saveProgress = async (page: number) => {
+    const { user, book, manifest } = stateRef.current;
+    if (!user || !book || !manifest) return;
+
+    try {
+      setIsSaving(true);
+      const result = await apiService.updateProgress(
+        user.id.toString(),
+        book.slug,
+        page,
+        manifest.pages.length
+      );
+
+      if (result && (result as { data?: { completed: boolean } }).data?.completed) {
+        toast.success("🎉 Congratulations! You've completed this book!", {
+          position: "top-center",
+          autoClose: 5000,
+        });
+      }
+    } catch (error) {
+      console.error("Error saving progress:", error);
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  // Auto-save progress when page changes
+  useEffect(() => {
+    if (currentPage > 0 && user && book) {
+      // Clear existing timeout
+      if (saveTimeoutRef.current) {
+        clearTimeout(saveTimeoutRef.current);
+      }
+
+      // Save after 2 seconds of inactivity
+      saveTimeoutRef.current = setTimeout(() => {
+        saveProgress(currentPage);
+      }, 2000);
+    }
+
+    return () => {
+      if (saveTimeoutRef.current) {
+        clearTimeout(saveTimeoutRef.current);
+      }
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentPage, user, book]);
+
+  // Save progress when leaving the page
+  useEffect(() => {
+    return () => {
+      const { currentPage, user, book, manifest } = stateRef.current;
+      if (currentPage > 0 && user && book && manifest) {
+        saveProgress(currentPage);
+      }
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   function nextPage() {
     bookFlipRef.current?.nextPage();
@@ -80,6 +169,13 @@ export default function ReaderPage() {
         <IconArrowLeft size={20} />
         <span>Back</span>
       </button>
+
+      {/* Saving indicator */}
+      {isSaving && (
+        <div className="fixed top-4 right-4 z-50 px-4 py-2 bg-blue-500/80 text-white rounded-lg backdrop-blur-md text-sm">
+          Saving progress...
+        </div>
+      )}
 
       <PageFlipBook
         ref={bookFlipRef}
