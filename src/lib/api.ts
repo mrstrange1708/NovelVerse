@@ -230,9 +230,9 @@ class ApiService {
         return this.extractBooks(response);
     }
 
-    async getBookById(id: string): Promise<Book | null> {
+    async getBookBySlug(slug: string): Promise<Book | null> {
         try {
-            const response = await this.api.get(`/book/${id}`) as BookByIdResponse;
+            const response = await this.api.get(`/book/${slug}`) as BookByIdResponse;
 
             if (typeof response === 'object' && response !== null) {
                 if ('success' in response && response.success && 'data' in response && response.data) {
@@ -260,18 +260,6 @@ class ApiService {
         if ('data' in response && Array.isArray(response.data)) return response.data;
         if ('books' in response && Array.isArray(response.books)) return response.books;
         return [];
-    }
-    async getBookBySlug(slug: string): Promise<Book | null> {
-        try {
-            const response = await this.api.get(`/book/slug/${slug}`);
-            if (response && response.data) return response.data;
-            return null;
-        } catch (error) {
-            console.error("Error fetching book by slug:", error);
-            return null;
-        }
-
-
     }
 
     async getManifest(slug: string): Promise<{ pages: Array<{ page: number; image: string }> } | null> {

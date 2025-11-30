@@ -5,15 +5,15 @@ import Link from "next/link";
 import { motion } from "motion/react";
 
 interface BookCardProps {
-  id: string;
+  slug: string;
   title: string;
   author: string;
   coverImage?: string;
 }
 
-export function BookCard({ id, title, author, coverImage }: BookCardProps) {
+export function BookCard({ slug, title, author, coverImage }: BookCardProps) {
   return (
-    <Link href={`/book/${id}`}>
+    <Link href={`/book/${slug}`}>
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}

@@ -25,7 +25,7 @@ import { motion } from "motion/react";
 export default function BookDetailsPage() {
   const params = useParams();
   const router = useRouter();
-  const id = params.id as string;
+  const slug = params.slug as string;
 
   const [book, setBook] = useState<Book | null>(null);
   const [loading, setLoading] = useState(true);
@@ -46,15 +46,15 @@ export default function BookDetailsPage() {
     }
 
     const fetchBook = async () => {
-      if (!id) {
-        console.error("No book ID found in URL");
+      if (!slug) {
+        console.error("No book slug found in URL");
         return;
       }
 
-      console.log("Fetching book with ID:", id);
+      console.log("Fetching book with slug:", slug);
       try {
         setLoading(true);
-        const data = await apiService.getBookById(id);
+        const data = await apiService.getBookBySlug(slug);
         console.log("Received book data:", data);
         if (!data) {
           console.error("No book data returned from API");
@@ -71,7 +71,7 @@ export default function BookDetailsPage() {
     };
 
     fetchBook();
-  }, [id, router]);
+  }, [slug, router]);
 
   const formatFileSize = (bytes?: number) => {
     if (!bytes) return "N/A";

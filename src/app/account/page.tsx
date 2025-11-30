@@ -330,7 +330,7 @@ export default function Account() {
                 {recentBooks.map((book) => (
                   <div key={book.id} className="transform hover:scale-105 transition-transform duration-300">
                     <BookCard
-                      id={book.id}
+                      slug={book.slug}
                       title={book.title}
                       author={book.author}
                       coverImage={book.coverImage}

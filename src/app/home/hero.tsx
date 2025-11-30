@@ -125,7 +125,7 @@ export function BooksHero() {
             {continueReading.map((book) => (
               <div key={book.id} className="flex-shrink-0 w-[160px]">
                 <BookCard
-                  id={book.id}
+                  slug={book.slug}
                   title={book.title}
                   author={book.author}
                   coverImage={book.coverImage}

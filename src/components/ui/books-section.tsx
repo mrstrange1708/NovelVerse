@@ -74,7 +74,7 @@ export function BooksSection({ title, showFeatured = false }: BooksSectionProps)
         {books.map((book) => (
           <div key={book.id} className="flex-shrink-0 w-[160px]">
             <BookCard
-              id={book.id}
+              slug={book.slug}
               title={book.title}
               author={book.author}
               coverImage={book.coverImage}

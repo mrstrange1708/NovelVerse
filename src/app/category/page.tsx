@@ -187,11 +187,10 @@ export default function Category() {
             <button
               key={category}
               onClick={() => setSelectedCategory(category)}
-              className={`px-6 py-2 rounded-full font-semibold transition-all duration-200 whitespace-nowrap ${
-                selectedCategory === category
+              className={`px-6 py-2 rounded-full font-semibold transition-all duration-200 whitespace-nowrap ${selectedCategory === category
                   ? "bg-blue-500 text-white"
                   : "bg-gray-800 text-gray-300 hover:bg-gray-700"
-              }`}
+                }`}
             >
               {category}
             </button>
@@ -241,7 +240,7 @@ export default function Category() {
                             className="flex-shrink-0 w-[160px]"
                           >
                             <BookCard
-                              id={book.id}
+                              slug={book.slug}
                               title={book.title}
                               author={book.author}
                               coverImage={book.coverImage}
@@ -268,7 +267,7 @@ export default function Category() {
                     {filteredBooks.map((book) => (
                       <div key={book.id}>
                         <BookCard
-                          id={book.id}
+                          slug={book.slug}
                           title={book.title}
                           author={book.author}
                           coverImage={book.coverImage}
