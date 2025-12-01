@@ -277,7 +277,7 @@ class ApiService {
 
     async updateProgress(userId: string, slug: string, currentPage: number, totalPages: number) {
         try {
-            return await this.api.post(`/book/progress`, {
+            return await this.api.put(`/book/progress`, {
                 userId,
                 slug,
                 currentPage,
