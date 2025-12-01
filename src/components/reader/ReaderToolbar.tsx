@@ -29,7 +29,6 @@ export default function ReaderToolbar({
       <div className="font-medium">{title}</div>
 
       <div className="flex items-center gap-6">
-        {/* Zoom Controls */}
         {onZoomOut && onZoomIn && onResetZoom && (
           <div className="flex items-center gap-2">
             <button
@@ -56,7 +55,7 @@ export default function ReaderToolbar({
           </div>
         )}
 
-        {/* Progress bar */}
+
         <div className="w-40 bg-white/20 h-1.5 rounded-full overflow-hidden">
           <div
             className="bg-white h-full"

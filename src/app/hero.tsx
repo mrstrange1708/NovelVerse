@@ -6,7 +6,7 @@ import Link from "next/link";
 import { AuroraBackground } from "../components/ui/aurora-background";
 import { LayoutTextFlip } from "@/components/ui/layout-text-flip";
 import { ShimmerButton } from "@/components/ui/shimmer-button";
-import { WorldMapDemo } from "./WorldMapDemo";
+import { WorldMapDemo } from "../components/ui/WorldMapDemo";
 import { Footer } from "@/components/ui/footer";
 import {
     Navbar,
