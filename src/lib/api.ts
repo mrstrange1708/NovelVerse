@@ -129,7 +129,7 @@ class ApiService {
         );
     }
 
-    // Auth methods
+
     async register(data: RegisterData): Promise<AuthResponse> {
         return this.api.post('/auth/register', data) as Promise<AuthResponse>;
     }
@@ -151,7 +151,7 @@ class ApiService {
         }
     }
 
-    // Handle Google OAuth callback token from URL
+
     async handleGoogleCallback(): Promise<User | null> {
         if (typeof window === 'undefined') return null;
         const urlParams = new URLSearchParams(window.location.search);
@@ -186,7 +186,6 @@ class ApiService {
         this.removeToken();
     }
 
-    // Token management (with SSR safety)
     setToken(token: string): void {
         if (typeof window !== 'undefined') {
             localStorage.setItem('authToken', token);
@@ -210,7 +209,7 @@ class ApiService {
         return !!this.getToken();
     }
 
-    // Book methods
+
     async getBooks(): Promise<Book[]> {
         const response = await this.api.get('/books') as BooksResponse;
         return this.extractBooks(response);
@@ -254,7 +253,7 @@ class ApiService {
         }
     }
 
-    // Helper to extract books array from various response formats
+
     private extractBooks(response: BooksResponse): Book[] {
         if (Array.isArray(response)) return response;
         if ('data' in response && Array.isArray(response.data)) return response.data;
@@ -289,7 +288,7 @@ class ApiService {
         }
     }
 
-    // Reading Progress Methods
+
     async getReadingProgress(): Promise<ReadingProgress[]> {
         try {
             const response = await this.api.get('/reading/progress') as { data?: ReadingProgress[] };

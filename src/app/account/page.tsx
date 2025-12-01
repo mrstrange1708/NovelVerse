@@ -47,7 +47,7 @@ export default function Account() {
     { name: "Contact", link: "/contact" },
   ];
 
-  // Load heatmap data and total books
+
   useEffect(() => {
     const loadData = async () => {
       if (isAuthenticated) {
@@ -99,7 +99,7 @@ export default function Account() {
   }
 
   const continueReading = user.continueReading || [];
-  // Use continueReading for the "Recently Read" section as requested
+
   const recentBooks = continueReading;
 
   const stats = [

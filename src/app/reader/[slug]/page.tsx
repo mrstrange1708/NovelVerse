@@ -29,13 +29,12 @@ export default function ReaderPage() {
   const [isSaving, setIsSaving] = useState(false);
   const saveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Refs to hold latest state for cleanup function and callbacks
+
   const stateRef = useRef({ user, book, manifest, currentPage });
   useEffect(() => {
     stateRef.current = { user, book, manifest, currentPage };
   }, [user, book, manifest, currentPage]);
 
-  // Load book and saved progress
   useEffect(() => {
     async function load() {
       if (!slug || Array.isArray(slug)) return;
@@ -47,12 +46,9 @@ export default function ReaderPage() {
       setBook(b);
       setManifest(m);
 
-      // Track book open for streak counting
       if (user && b) {
         apiService.trackBookOpen(user.id.toString(), b.id);
       }
-
-      // Load saved progress if user is logged in
       if (user && b) {
         const progress = await apiService.getBookProgress(b.id);
         if (progress && progress.currentPage > 1) {
@@ -69,7 +65,6 @@ export default function ReaderPage() {
     load();
   }, [slug, user]);
 
-  // Save progress function
   const saveProgress = async (page: number) => {
     const { user, book, manifest } = stateRef.current;
     if (!user || !book || !manifest) return;
@@ -96,15 +91,11 @@ export default function ReaderPage() {
     }
   };
 
-  // Auto-save progress when page changes
   useEffect(() => {
     if (currentPage > 0 && user && book) {
-      // Clear existing timeout
       if (saveTimeoutRef.current) {
         clearTimeout(saveTimeoutRef.current);
       }
-
-      // Save after 2 seconds of inactivity
       saveTimeoutRef.current = setTimeout(() => {
         saveProgress(currentPage);
       }, 2000);
@@ -115,10 +106,8 @@ export default function ReaderPage() {
         clearTimeout(saveTimeoutRef.current);
       }
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPage, user, book]);
 
-  // Save progress when leaving the page
   useEffect(() => {
     return () => {
       const { currentPage, user, book, manifest } = stateRef.current;
@@ -126,7 +115,7 @@ export default function ReaderPage() {
         saveProgress(currentPage);
       }
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, []);
 
   function nextPage() {
@@ -161,7 +150,7 @@ export default function ReaderPage() {
 
   return (
     <div className="relative w-full h-screen">
-      {/* Back Button */}
+
       <button
         onClick={() => router.back()}
         className="fixed top-4 left-4 z-50 flex items-center gap-2 px-4 py-2 bg-black/70 hover:bg-black/90 text-white rounded-lg backdrop-blur-md transition-all"
@@ -170,7 +159,7 @@ export default function ReaderPage() {
         <span>Back</span>
       </button>
 
-      {/* Saving indicator */}
+
       {isSaving && (
         <div className="fixed top-4 right-4 z-50 px-4 py-2 bg-blue-500/80 text-white rounded-lg backdrop-blur-md text-sm">
           Saving progress...

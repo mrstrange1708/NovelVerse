@@ -12,12 +12,11 @@ export default function Home() {
 
   useEffect(() => {
     const handleAuth = async () => {
-      // Check if there's a token in the URL (Google callback)
+
       const urlParams = new URLSearchParams(window.location.search);
       const token = urlParams.get("token");
 
       if (token) {
-        // Handle Google OAuth callback
         await handleGoogleCallback();
       }
     };

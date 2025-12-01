@@ -114,7 +114,7 @@ export const LoaderThree = () => {
         animate={{ pathLength: 1, fill: "var(--fill-final)" }}
         transition={{
           duration: 2,
-          // cubic-bezier easing for easeInOut
+
           ease: [0.42, 0, 0.58, 1],
           repeat: Infinity,
           repeatType: "reverse",

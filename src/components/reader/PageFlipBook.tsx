@@ -30,7 +30,7 @@ export interface PageFlipBookRef {
 
 const PageFlipBook = forwardRef<PageFlipBookRef, Props>(
   ({ manifest, onPageChange }, ref) => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
     const bookRef = useRef<any>(null);
     const [pages, setPages] = useState<Page[]>([]);
     const [zoom, setZoom] = useState(1);

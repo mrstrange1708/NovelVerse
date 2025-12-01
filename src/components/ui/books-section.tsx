@@ -22,7 +22,7 @@ export function BooksSection({ title, showFeatured = false }: BooksSectionProps)
           ? await apiService.getFeaturedBooks()
           : await apiService.getBooks();
 
-        // Ensure data is an array
+
         const booksArray = Array.isArray(data) ? data : [];
         console.log("Fetched books:", booksArray);
         setBooks(booksArray);

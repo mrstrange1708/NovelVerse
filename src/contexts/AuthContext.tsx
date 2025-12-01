@@ -20,7 +20,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  // Initial auth check on mount
   useEffect(() => {
     const initAuth = async () => {
       try {
@@ -32,7 +31,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             setUserState(currentUser);
             setIsAuthenticated(true);
           } else {
-            // Invalid token, clear it
             apiService.removeToken();
             setIsAuthenticated(false);
           }
@@ -48,7 +46,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     };
 
     initAuth();
-  }, []); // Run only once on mount
+  }, []); 
 
   const login = async (email: string, password: string) => {
     try {

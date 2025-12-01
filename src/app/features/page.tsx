@@ -240,10 +240,9 @@ const SkeletonTwo = () => {
     "https://images.unsplash.com/photo-1543002588-bfa74002ed7e?w=800",
   ];
 
-  // Generate consistent rotation values to avoid hydration mismatch
+
   const rotations = React.useMemo(
     () => images.map(() => Math.random() * 20 - 10),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   );
 

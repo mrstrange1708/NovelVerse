@@ -19,7 +19,6 @@ export function ReadingHeatmap({
   } | null>(null);
   const [tooltipPos, setTooltipPos] = useState({ x: 0, y: 0 });
 
-  // Generate all days for the year
   const generateYearDays = () => {
     const days: Date[] = [];
     const startDate = new Date(year, 0, 1);
@@ -38,12 +37,12 @@ export function ReadingHeatmap({
 
   const yearDays = generateYearDays();
 
-  // Create a map for quick lookup
+ 
   const dataMap = new Map(
     data.map((item) => [new Date(item.date).toDateString(), item.pagesRead])
   );
 
-  // Get color intensity based on pages read
+ 
   const getColor = (pagesRead: number) => {
     if (pagesRead === 0) return "bg-gray-800/50";
     if (pagesRead < 10) return "bg-green-900/60";
@@ -52,15 +51,15 @@ export function ReadingHeatmap({
     return "bg-green-400";
   };
 
-  // Group days by week
+ 
   const weeks: (Date | null)[][] = [];
   let currentWeek: (Date | null)[] = [];
 
-  // Start from the first day of the year
+ 
   const firstDay = yearDays[0];
-  const dayOfWeek = firstDay.getDay(); // 0 = Sunday, 1 = Monday, etc.
+  const dayOfWeek = firstDay.getDay(); 
 
-  // Add empty cells for days before the first day of the year
+ 
   for (let i = 0; i < dayOfWeek; i++) {
     currentWeek.push(null);
   }
@@ -68,7 +67,7 @@ export function ReadingHeatmap({
   yearDays.forEach((day, index) => {
     currentWeek.push(day);
     if (day.getDay() === 6 || index === yearDays.length - 1) {
-      // Fill remaining days of the week with null
+      
       while (currentWeek.length < 7) {
         currentWeek.push(null);
       }
@@ -77,7 +76,7 @@ export function ReadingHeatmap({
     }
   });
 
-  // Get month labels with proper positioning
+ 
   const getMonthLabels = () => {
     const labels: { month: string; weekIndex: number }[] = [];
     let lastMonth = -1;
@@ -125,7 +124,7 @@ export function ReadingHeatmap({
       }),
       pages,
     });
-    // Position tooltip above the cell
+
     const rect = (event.target as HTMLElement).getBoundingClientRect();
     setTooltipPos({
       x: rect.left + rect.width / 2,
@@ -135,11 +134,11 @@ export function ReadingHeatmap({
 
   return (
     <div className="relative w-full">
-      {/* Year label */}
+
       <div className="text-gray-400 text-sm font-medium mb-3">{year}</div>
 
       <div className="flex gap-3">
-        {/* Day labels - all 7 days */}
+
         <div
           className="flex flex-col justify-start"
           style={{ paddingTop: "24px" }}
@@ -167,9 +166,7 @@ export function ReadingHeatmap({
           </div>
         </div>
 
-        {/* Heatmap grid container */}
         <div className="flex-1 overflow-x-auto">
-          {/* Month labels */}
           <div className="flex mb-2 h-5 relative">
             {monthLabels.map((label) => (
               <div
@@ -184,7 +181,7 @@ export function ReadingHeatmap({
             ))}
           </div>
 
-          {/* Grid */}
+
           <div className="flex gap-[2px]">
             {weeks.map((week, weekIndex) => (
               <div key={weekIndex} className="flex flex-col gap-[2px]">
@@ -220,7 +217,7 @@ export function ReadingHeatmap({
         </div>
       </div>
 
-      {/* Tooltip */}
+
       {hoveredCell && (
         <div
           className="fixed z-99 px-3 py-2 bg-gray-900 border border-gray-700 rounded-lg shadow-xl text-sm pointer-events-none"
@@ -238,7 +235,7 @@ export function ReadingHeatmap({
         </div>
       )}
 
-      {/* Legend */}
+
       <div className="flex items-center gap-2 mt-4 text-xs text-gray-400">
         <span>Less</span>
         <div className="flex gap-1">
