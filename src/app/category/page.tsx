@@ -78,6 +78,7 @@ export default function Category() {
     const fetchBooks = async () => {
       try {
         setLoading(true);
+        setError(null);
 
         // If "All" category is selected and no search/sort, use category pagination
         if (
@@ -85,22 +86,36 @@ export default function Category() {
           !searchQuery &&
           sortBy === "title-asc"
         ) {
+          const token = apiService.getToken();
+          if (!token) {
+            throw new Error("Not authenticated");
+          }
+
           const response = await fetch(
             `${process.env.NEXT_PUBLIC_API_BASE_URL}/books?paginateByCategory=true&page=${currentPage}&categoriesPerPage=${CATEGORIES_PER_PAGE}`,
             {
               headers: {
-                Authorization: `Bearer ${apiService.getToken()}`,
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json",
               },
             }
           );
+
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+
           const data = await response.json();
 
           if (data.categoryGroups) {
             setCategoryGroups(data.categoryGroups);
+            setBooks([]);
             if (data.pagination) {
               setTotalPages(data.pagination.totalPages);
               setTotalBooks(data.pagination.total);
             }
+          } else {
+            setCategoryGroups([]);
           }
         } else {
           // Regular book fetching for specific category/search/sort
