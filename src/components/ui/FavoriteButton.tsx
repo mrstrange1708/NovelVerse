@@ -21,21 +21,21 @@ export function FavoriteButton({
   const [isLoading, setIsLoading] = useState(false);
   const [isChecking, setIsChecking] = useState(true);
 
-  const checkFavoriteStatus = async () => {
-    try {
-      setIsChecking(true);
-      const status = await apiService.checkIsFavorite(bookId);
-      setIsFavorite(status);
-    } catch (error) {
-      console.error("Failed to check favorite status:", error);
-    } finally {
-      setIsChecking(false);
-    }
-  };
-
   useEffect(() => {
+    const checkFavoriteStatus = async () => {
+      try {
+        setIsChecking(true);
+        const status = await apiService.checkIsFavorite(bookId);
+        setIsFavorite(status);
+      } catch (error) {
+        console.error("Failed to check favorite status:", error);
+      } finally {
+        setIsChecking(false);
+      }
+    };
+
     checkFavoriteStatus();
-  }, [bookId, checkFavoriteStatus]);
+  }, [bookId]);
 
   const toggleFavorite = async (e: React.MouseEvent) => {
     e.preventDefault();
