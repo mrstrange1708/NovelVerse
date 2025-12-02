@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { IconBook, IconClock } from "@tabler/icons-react";
 import { motion } from "motion/react";
 import { ContinueReadingBook } from "@/lib/api";
@@ -36,9 +37,11 @@ export function ContinueReadingCard({ book, index = 0 }: ContinueReadingCardProp
                         {/* Book Cover */}
                         <div className="flex-shrink-0">
                             {book.coverImage ? (
-                                <img
+                                <Image
                                     src={book.coverImage}
                                     alt={book.title}
+                                    width={64}
+                                    height={96}
                                     className="w-16 h-24 object-cover rounded-lg shadow-md"
                                 />
                             ) : (

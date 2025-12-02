@@ -21,10 +21,6 @@ export function FavoriteButton({
   const [isLoading, setIsLoading] = useState(false);
   const [isChecking, setIsChecking] = useState(true);
 
-  useEffect(() => {
-    checkFavoriteStatus();
-  }, [bookId]);
-
   const checkFavoriteStatus = async () => {
     try {
       setIsChecking(true);
@@ -36,6 +32,10 @@ export function FavoriteButton({
       setIsChecking(false);
     }
   };
+
+  useEffect(() => {
+    checkFavoriteStatus();
+  }, [bookId, checkFavoriteStatus]);
 
   const toggleFavorite = async (e: React.MouseEvent) => {
     e.preventDefault();

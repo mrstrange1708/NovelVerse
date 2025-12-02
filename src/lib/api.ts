@@ -98,6 +98,13 @@ export interface Favorite {
     description?: string;
 }
 
+export interface Pagination {
+    total: number;
+    page: number;
+    limit: number;
+    totalPages: number;
+}
+
 interface ApiError {
     error?: string;
     message?: string;
@@ -231,7 +238,7 @@ class ApiService {
         sortBy?: string;
         sortOrder?: 'asc' | 'desc';
         isFeatured?: boolean;
-    }): Promise<{ books: Book[]; pagination?: any }> {
+    }): Promise<{ books: Book[]; pagination?: Pagination }> {
         try {
             const queryParams: Record<string, string> = {};
 
@@ -243,7 +250,7 @@ class ApiService {
             if (params?.sortOrder) queryParams.sortOrder = params.sortOrder;
             if (params?.isFeatured !== undefined) queryParams.isFeatured = params.isFeatured.toString();
 
-            const response = await this.api.get('/books', { params: queryParams }) as { success?: boolean; books?: Book[]; pagination?: any };
+            const response = await this.api.get('/books', { params: queryParams }) as { success?: boolean; books?: Book[]; pagination?: Pagination };
             return {
                 books: response.books || (Array.isArray(response) ? response : []),
                 pagination: response.pagination
@@ -265,7 +272,7 @@ class ApiService {
         search?: string;
         sortBy?: string;
         sortOrder?: 'asc' | 'desc';
-    }): Promise<{ books: Book[]; pagination?: any }> {
+    }): Promise<{ books: Book[]; pagination?: Pagination }> {
         return this.getBooks({ ...params, category });
     }
 
@@ -406,7 +413,7 @@ class ApiService {
     }
 
     // Favorites API
-    async getFavorites(page = 1, limit = 20, category?: string): Promise<{ favorites: Favorite[]; pagination: any }> {
+    async getFavorites(page = 1, limit = 20, category?: string): Promise<{ favorites: Favorite[]; pagination: Pagination }> {
         try {
             const params: Record<string, string> = {
                 page: page.toString(),
@@ -414,7 +421,7 @@ class ApiService {
             };
             if (category) params.category = category;
 
-            const response = await this.api.get('/favorites', { params }) as { success: boolean; favorites: Favorite[]; pagination: any };
+            const response = await this.api.get('/favorites', { params }) as { success: boolean; favorites: Favorite[]; pagination: Pagination };
             return { favorites: response.favorites || [], pagination: response.pagination };
         } catch (error) {
             console.error("Error fetching favorites:", error);
