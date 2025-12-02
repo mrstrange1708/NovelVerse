@@ -240,7 +240,6 @@ const SkeletonTwo = () => {
     "https://images.unsplash.com/photo-1543002588-bfa74002ed7e?w=800",
   ];
 
-
   const rotations = React.useMemo(
     () => images.map(() => Math.random() * 20 - 10),
     [images]
