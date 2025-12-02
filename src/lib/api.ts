@@ -85,6 +85,19 @@ export interface HeatmapData {
     pagesRead: number;
 }
 
+export interface Favorite {
+    favoriteId: string;
+    addedAt: string;
+    id: string;
+    title: string;
+    slug: string;
+    author: string;
+    coverImage?: string;
+    category: string;
+    pageCount?: number;
+    description?: string;
+}
+
 interface ApiError {
     error?: string;
     message?: string;
@@ -209,24 +222,51 @@ class ApiService {
         return !!this.getToken();
     }
 
+    // Book methods
+    async getBooks(params?: {
+        page?: number;
+        limit?: number;
+        category?: string;
+        search?: string;
+        sortBy?: string;
+        sortOrder?: 'asc' | 'desc';
+        isFeatured?: boolean;
+    }): Promise<{ books: Book[]; pagination?: any }> {
+        try {
+            const queryParams: Record<string, string> = {};
 
-    async getBooks(): Promise<Book[]> {
-        const response = await this.api.get('/books') as BooksResponse;
-        return this.extractBooks(response);
+            if (params?.page) queryParams.page = params.page.toString();
+            if (params?.limit) queryParams.limit = params.limit.toString();
+            if (params?.category && params.category !== 'All') queryParams.category = params.category;
+            if (params?.search) queryParams.search = params.search;
+            if (params?.sortBy) queryParams.sortBy = params.sortBy;
+            if (params?.sortOrder) queryParams.sortOrder = params.sortOrder;
+            if (params?.isFeatured !== undefined) queryParams.isFeatured = params.isFeatured.toString();
+
+            const response = await this.api.get('/books', { params: queryParams }) as { success?: boolean; books?: Book[]; pagination?: any };
+            return {
+                books: response.books || (Array.isArray(response) ? response : []),
+                pagination: response.pagination
+            };
+        } catch (error) {
+            console.error("Error fetching books:", error);
+            return { books: [] };
+        }
     }
 
     async getFeaturedBooks(): Promise<Book[]> {
-        const response = await this.api.get('/books', {
-            params: { isFeatured: true },
-        }) as BooksResponse;
-        return this.extractBooks(response);
+        const response = await this.getBooks({ isFeatured: true, limit: 50 });
+        return response.books;
     }
 
-    async getBooksByCategory(category: string): Promise<Book[]> {
-        const response = await this.api.get('/books', {
-            params: { category },
-        }) as BooksResponse;
-        return this.extractBooks(response);
+    async getBooksByCategory(category: string, params?: {
+        page?: number;
+        limit?: number;
+        search?: string;
+        sortBy?: string;
+        sortOrder?: 'asc' | 'desc';
+    }): Promise<{ books: Book[]; pagination?: any }> {
+        return this.getBooks({ ...params, category });
     }
 
     async getBookBySlug(slug: string): Promise<Book | null> {
@@ -362,6 +402,70 @@ class ApiService {
         } catch (error) {
             console.error("Error tracking book open:", error);
             return null;
+        }
+    }
+
+    // Favorites API
+    async getFavorites(page = 1, limit = 20, category?: string): Promise<{ favorites: Favorite[]; pagination: any }> {
+        try {
+            const params: Record<string, string> = {
+                page: page.toString(),
+                limit: limit.toString()
+            };
+            if (category) params.category = category;
+
+            const response = await this.api.get('/favorites', { params }) as { success: boolean; favorites: Favorite[]; pagination: any };
+            return { favorites: response.favorites || [], pagination: response.pagination };
+        } catch (error) {
+            console.error("Error fetching favorites:", error);
+            return { favorites: [], pagination: { total: 0, page: 1, limit: 20, totalPages: 0 } };
+        }
+    }
+
+    async addToFavorites(bookId: string): Promise<{ success: boolean; message: string }> {
+        try {
+            return await this.api.post('/favorites', { bookId }) as { success: boolean; message: string };
+        } catch (error) {
+            console.error("Error adding to favorites:", error);
+            throw error;
+        }
+    }
+
+    async removeFromFavorites(bookId: string): Promise<{ success: boolean; message: string }> {
+        try {
+            return await this.api.delete(`/favorites/${bookId}`) as { success: boolean; message: string };
+        } catch (error) {
+            console.error("Error removing from favorites:", error);
+            throw error;
+        }
+    }
+
+    async toggleFavorite(bookId: string): Promise<{ success: boolean; isFavorite: boolean; message: string }> {
+        try {
+            return await this.api.post('/favorites/toggle', { bookId }) as { success: boolean; isFavorite: boolean; message: string };
+        } catch (error) {
+            console.error("Error toggling favorite:", error);
+            throw error;
+        }
+    }
+
+    async checkIsFavorite(bookId: string): Promise<boolean> {
+        try {
+            const response = await this.api.get(`/favorites/check/${bookId}`) as { success: boolean; isFavorite: boolean };
+            return response.isFavorite || false;
+        } catch (error) {
+            console.error("Error checking favorite status:", error);
+            return false;
+        }
+    }
+
+    async getFavoritesCount(): Promise<number> {
+        try {
+            const response = await this.api.get('/favorites/count') as { success: boolean; count: number };
+            return response.count || 0;
+        } catch (error) {
+            console.error("Error getting favorites count:", error);
+            return 0;
         }
     }
 }

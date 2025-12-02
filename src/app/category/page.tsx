@@ -39,19 +39,20 @@ const CATEGORIES = [
 
 export default function Category() {
   const [books, setBooks] = useState<Book[]>([]);
-  const [filteredBooks, setFilteredBooks] = useState<Book[]>([]);
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
   const [sortBy, setSortBy] = useState<
     "title-asc" | "title-desc" | "pages-asc" | "pages-desc"
   >("title-asc");
   const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalBooks, setTotalBooks] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const router = useRouter();
 
-  const CATEGORIES_PER_PAGE = 3;
+  const BOOKS_PER_PAGE = 20;
 
   const navItems = [
     { name: "About", link: "/about" },
@@ -69,73 +70,52 @@ export default function Category() {
     const fetchBooks = async () => {
       try {
         setLoading(true);
-        const data = await apiService.getBooks();
-        const booksArray = Array.isArray(data) ? data : [];
-        setBooks(booksArray);
-        setFilteredBooks(booksArray);
+
+        const [sortField, sortOrder] = sortBy.split("-") as [
+          string,
+          "asc" | "desc"
+        ];
+        const sortByField = sortField === "pages" ? "pageCount" : sortField;
+
+        const response = await apiService.getBooks({
+          page: currentPage,
+          limit: BOOKS_PER_PAGE,
+          category: selectedCategory,
+          search: searchQuery || undefined,
+          sortBy: sortByField,
+          sortOrder: sortOrder,
+        });
+
+        setBooks(response.books || []);
+        if (response.pagination) {
+          setTotalPages(response.pagination.totalPages);
+          setTotalBooks(response.pagination.total);
+        }
       } catch (err) {
         setError(err instanceof Error ? err.message : "Failed to fetch books");
         console.error("Error fetching books:", err);
         setBooks([]);
-        setFilteredBooks([]);
       } finally {
         setLoading(false);
       }
     };
 
     fetchBooks();
-  }, [router]);
+  }, [router, selectedCategory, searchQuery, sortBy, currentPage]);
+
 
   useEffect(() => {
-    let filtered = books;
+    setCurrentPage(1);
+  }, [selectedCategory, searchQuery, sortBy]);
 
-    if (selectedCategory !== "All") {
-      filtered = filtered.filter((book) => book.category === selectedCategory);
+  const categoryGroups = books.reduce((acc, book) => {
+    const cat = book.category;
+    if (!acc[cat]) {
+      acc[cat] = [];
     }
-
-    if (searchQuery.trim()) {
-      const query = searchQuery.toLowerCase();
-      filtered = filtered.filter(
-        (book) =>
-          book.title.toLowerCase().includes(query) ||
-          book.author.toLowerCase().includes(query) ||
-          book.description?.toLowerCase().includes(query)
-      );
-    }
-
-    filtered = [...filtered].sort((a, b) => {
-      if (sortBy === "title-asc") {
-        return a.title.localeCompare(b.title);
-      } else if (sortBy === "title-desc") {
-        return b.title.localeCompare(a.title);
-      } else if (sortBy === "pages-asc") {
-        return (a.pageCount || 0) - (b.pageCount || 0);
-      } else if (sortBy === "pages-desc") {
-        return (b.pageCount || 0) - (a.pageCount || 0);
-      }
-      return 0;
-    });
-
-    setFilteredBooks(filtered);
-    setCurrentPage(1); 
-  }, [selectedCategory, searchQuery, books, sortBy]);
-
-  const categoryGroups = CATEGORIES.slice(1).reduce((acc, category) => {
-    const booksInCategory = filteredBooks.filter(
-      (book) => book.category === category
-    );
-    if (booksInCategory.length > 0) {
-      acc[category] = booksInCategory;
-    }
+    acc[cat].push(book);
     return acc;
   }, {} as Record<string, Book[]>);
-
-
-  const categoryEntries = Object.entries(categoryGroups);
-  const totalPages = Math.ceil(categoryEntries.length / CATEGORIES_PER_PAGE);
-  const startIndex = (currentPage - 1) * CATEGORIES_PER_PAGE;
-  const endIndex = startIndex + CATEGORIES_PER_PAGE;
-  const paginatedCategories = categoryEntries.slice(startIndex, endIndex);
 
   const clearSearch = () => {
     setSearchQuery("");
@@ -210,7 +190,6 @@ export default function Category() {
               />
             </div>
 
-
             <div className="relative flex-1 md:w-96">
               <Search
                 className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400"
@@ -282,97 +261,116 @@ export default function Category() {
             {selectedCategory === "All" && !searchQuery ? (
               <>
                 <div className="flex flex-col gap-12">
-                  {paginatedCategories.map(([category, categoryBooks]) => (
-                    <div key={category}>
-                      <h2 className="text-2xl font-bold mb-6 text-white">
-                        {category}
-                      </h2>
-                      <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide">
-                        {categoryBooks.map((book) => (
-                          <div
-                            key={book.id}
-                            className="flex-shrink-0 w-[160px]"
-                          >
-                            <BookCard
-                              slug={book.slug}
-                              title={book.title}
-                              author={book.author}
-                              coverImage={book.coverImage}
-                            />
-                          </div>
-                        ))}
+                  {Object.entries(categoryGroups).map(
+                    ([category, categoryBooks]) => (
+                      <div key={category}>
+                        <h2 className="text-2xl font-bold mb-6 text-white">
+                          {category}
+                        </h2>
+                        <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide">
+                          {categoryBooks.map((book) => (
+                            <div
+                              key={book.id}
+                              className="flex-shrink-0 w-[160px]"
+                            >
+                              <BookCard
+                                slug={book.slug}
+                                title={book.title}
+                                author={book.author}
+                                coverImage={book.coverImage}
+                              />
+                            </div>
+                          ))}
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    )
+                  )}
                   {Object.keys(categoryGroups).length === 0 && (
                     <p className="text-gray-400 text-lg">No books available.</p>
                   )}
                 </div>
-
-                {totalPages > 1 && (
-                  <div className="flex justify-center items-center gap-4 mt-12">
-                    <button
-                      onClick={() =>
-                        setCurrentPage((prev) => Math.max(1, prev - 1))
-                      }
-                      disabled={currentPage === 1}
-                      className="px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
-                    >
-                      <ChevronLeft size={20} />
-                      Previous
-                    </button>
-
-                    <div className="flex items-center gap-2">
-                      {Array.from({ length: totalPages }, (_, i) => i + 1).map(
-                        (page) => (
-                          <button
-                            key={page}
-                            onClick={() => setCurrentPage(page)}
-                            className={`w-10 h-10 rounded-lg font-semibold transition-all ${
-                              currentPage === page
-                                ? "bg-blue-500 text-white"
-                                : "bg-gray-800 text-gray-300 hover:bg-gray-700"
-                            }`}
-                          >
-                            {page}
-                          </button>
-                        )
-                      )}
-                    </div>
-
-                    <button
-                      onClick={() =>
-                        setCurrentPage((prev) => Math.min(totalPages, prev + 1))
-                      }
-                      disabled={currentPage === totalPages}
-                      className="px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
-                    >
-                      Next
-                      <ChevronRight size={20} />
-                    </button>
-                  </div>
-                )}
               </>
             ) : (
               <div>
                 <h2 className="text-2xl font-bold mb-6 text-white">
                   {searchQuery
-                    ? `Search Results`
-                    : `${selectedCategory} (${filteredBooks.length})`}
+                    ? `Search Results (${totalBooks})`
+                    : `${selectedCategory} (${totalBooks})`}
                 </h2>
-                {filteredBooks.length > 0 ? (
-                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
-                    {filteredBooks.map((book) => (
-                      <div key={book.id}>
-                        <BookCard
-                          slug={book.slug}
-                          title={book.title}
-                          author={book.author}
-                          coverImage={book.coverImage}
-                        />
+                {books.length > 0 ? (
+                  <>
+                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+                      {books.map((book) => (
+                        <div key={book.id}>
+                          <BookCard
+                            slug={book.slug}
+                            title={book.title}
+                            author={book.author}
+                            coverImage={book.coverImage}
+                          />
+                        </div>
+                      ))}
+                    </div>
+
+                    {totalPages > 1 && (
+                      <div className="flex justify-center items-center gap-4 mt-12">
+                        <button
+                          onClick={() =>
+                            setCurrentPage((prev) => Math.max(1, prev - 1))
+                          }
+                          disabled={currentPage === 1}
+                          className="px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                        >
+                          <ChevronLeft size={20} />
+                          Previous
+                        </button>
+
+                        <div className="flex items-center gap-2">
+                          {Array.from(
+                            { length: Math.min(totalPages, 5) },
+                            (_, i) => {
+                              let pageNum;
+                              if (totalPages <= 5) {
+                                pageNum = i + 1;
+                              } else if (currentPage <= 3) {
+                                pageNum = i + 1;
+                              } else if (currentPage >= totalPages - 2) {
+                                pageNum = totalPages - 4 + i;
+                              } else {
+                                pageNum = currentPage - 2 + i;
+                              }
+                              return (
+                                <button
+                                  key={pageNum}
+                                  onClick={() => setCurrentPage(pageNum)}
+                                  className={`w-10 h-10 rounded-lg font-semibold transition-all ${
+                                    currentPage === pageNum
+                                      ? "bg-blue-500 text-white"
+                                      : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                                  }`}
+                                >
+                                  {pageNum}
+                                </button>
+                              );
+                            }
+                          )}
+                        </div>
+
+                        <button
+                          onClick={() =>
+                            setCurrentPage((prev) =>
+                              Math.min(totalPages, prev + 1)
+                            )
+                          }
+                          disabled={currentPage === totalPages}
+                          className="px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                        >
+                          Next
+                          <ChevronRight size={20} />
+                        </button>
                       </div>
-                    ))}
-                  </div>
+                    )}
+                  </>
                 ) : (
                   <p className="text-gray-400 text-lg">
                     {searchQuery

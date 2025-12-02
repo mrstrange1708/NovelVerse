@@ -31,12 +31,15 @@ import { toast } from "react-toastify";
 import { LoaderOne } from "@/components/ui/loader";
 import { BookCard } from "@/components/ui/book-card";
 import { ReadingHeatmap } from "@/components/ui/ReadingHeatmap";
-import { apiService, HeatmapData } from "@/lib/api";
+import { apiService, HeatmapData, Favorite } from "@/lib/api";
+import { IconHeart } from "@tabler/icons-react";
 
 export default function Account() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [heatmapData, setHeatmapData] = useState<HeatmapData[]>([]);
   const [totalBooks, setTotalBooks] = useState(0);
+  const [favorites, setFavorites] = useState<Favorite[]>([]);
+  const [favoritesLoading, setFavoritesLoading] = useState(true);
   const router = useRouter();
   const { logout, user, isAuthenticated, isLoading, refreshUser } = useAuth();
 
@@ -47,27 +50,29 @@ export default function Account() {
     { name: "Contact", link: "/contact" },
   ];
 
-
   useEffect(() => {
     const loadData = async () => {
       if (isAuthenticated) {
         try {
-          const [heatmap, books] = await Promise.all([
+          const [heatmap, booksResponse, favs] = await Promise.all([
             apiService.getReadingHeatmap(),
-            apiService.getBooks()
+            apiService.getBooks({ limit: 100 }),
+            apiService.getFavorites(1, 10),
           ]);
           setHeatmapData(heatmap);
-          if (Array.isArray(books)) {
-            setTotalBooks(books.length);
-          }
+          setTotalBooks(
+            booksResponse.pagination?.total || booksResponse.books?.length || 0
+          );
+          setFavorites(favs.favorites || []);
         } catch (error) {
           console.error("Error fetching data:", error);
+        } finally {
+          setFavoritesLoading(false);
         }
       }
     };
     loadData();
   }, [isAuthenticated]);
-
 
   useEffect(() => {
     const initUser = async () => {
@@ -328,7 +333,10 @@ export default function Account() {
             {recentBooks.length > 0 ? (
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
                 {recentBooks.map((book) => (
-                  <div key={book.id} className="transform hover:scale-105 transition-transform duration-300">
+                  <div
+                    key={book.id}
+                    className="transform hover:scale-105 transition-transform duration-300"
+                  >
                     <BookCard
                       slug={book.slug}
                       title={book.title}
@@ -361,6 +369,82 @@ export default function Account() {
                 >
                   <IconStar size={20} />
                   Explore Books
+                </Link>
+              </div>
+            )}
+          </motion.div>
+
+          {/* Favorites Section */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.6 }}
+            className="bg-gradient-to-br from-gray-900/80 to-gray-800/50 backdrop-blur-xl border border-gray-700/50 rounded-2xl p-8 shadow-2xl mb-8 z-0"
+          >
+            <div className="flex items-center justify-between mb-6">
+              <div>
+                <h2 className="text-2xl font-bold text-white mb-1 flex items-center gap-2">
+                  <IconHeart className="text-red-400" size={28} />
+                  My Favorites
+                </h2>
+                <p className="text-gray-400 text-sm">
+                  Books you've marked as favorites
+                </p>
+              </div>
+              {favorites.length > 0 && (
+                <Link
+                  href="/category"
+                  className="text-blue-400 hover:text-blue-300 text-sm font-medium flex items-center gap-1 transition-colors"
+                >
+                  Explore More
+                  <span>→</span>
+                </Link>
+              )}
+            </div>
+
+            {favoritesLoading ? (
+              <div className="text-center py-16">
+                <LoaderOne />
+              </div>
+            ) : favorites.length > 0 ? (
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
+                {favorites.map((book) => (
+                  <div
+                    key={book.id}
+                    className="transform hover:scale-105 transition-transform duration-300"
+                  >
+                    <BookCard
+                      slug={book.slug}
+                      title={book.title}
+                      author={book.author}
+                      coverImage={book.coverImage}
+                    />
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-16">
+                <motion.div
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ type: "spring", duration: 0.6 }}
+                  className="w-24 h-24 bg-gradient-to-br from-red-900/30 to-pink-900/30 rounded-full flex items-center justify-center mx-auto mb-6"
+                >
+                  <IconHeart className="w-12 h-12 text-red-400" />
+                </motion.div>
+                <h3 className="text-xl font-semibold text-white mb-2">
+                  No favorites yet
+                </h3>
+                <p className="text-gray-400 mb-6 max-w-md mx-auto">
+                  Start adding books to your favorites by clicking the heart
+                  icon on book pages
+                </p>
+                <Link
+                  href="/category"
+                  className="inline-flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 text-white font-medium rounded-xl transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-red-500/30"
+                >
+                  <IconHeart size={20} />
+                  Find Your Favorites
                 </Link>
               </div>
             )}

@@ -21,6 +21,7 @@ import { IconArrowLeft, IconBookDownload } from "@tabler/icons-react";
 import { User as UserIcon } from "lucide-react";
 import Link from "next/link";
 import { motion } from "motion/react";
+import { FavoriteButton } from "@/components/ui/FavoriteButton";
 
 export default function BookDetailsPage() {
   const params = useParams();
@@ -211,13 +212,18 @@ export default function BookDetailsPage() {
 
           <div className="space-y-6">
             <div>
-              <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
-                {book.title}
-              </h1>
-              <p className="text-xl text-gray-300 mb-4">by {book.author}</p>
-              <span className="inline-block px-4 py-2 bg-blue-500/20 text-blue-300 rounded-full text-sm font-semibold">
-                {book.category}
-              </span>
+              <div className="flex items-start justify-between mb-4">
+                <div className="flex-1">
+                  <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
+                    {book.title}
+                  </h1>
+                  <p className="text-xl text-gray-300 mb-4">by {book.author}</p>
+                  <span className="inline-block px-4 py-2 bg-blue-500/20 text-blue-300 rounded-full text-sm font-semibold">
+                    {book.category}
+                  </span>
+                </div>
+                <FavoriteButton bookId={book.id} size={32} className="mt-2" />
+              </div>
             </div>
 
             {book.description && (

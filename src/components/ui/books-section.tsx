@@ -9,7 +9,10 @@ interface BooksSectionProps {
   showFeatured?: boolean;
 }
 
-export function BooksSection({ title, showFeatured = false }: BooksSectionProps) {
+export function BooksSection({
+  title,
+  showFeatured = false,
+}: BooksSectionProps) {
   const [books, setBooks] = useState<Book[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -18,14 +21,12 @@ export function BooksSection({ title, showFeatured = false }: BooksSectionProps)
     const fetchBooks = async () => {
       try {
         setLoading(true);
-        const data = showFeatured
-          ? await apiService.getFeaturedBooks()
-          : await apiService.getBooks();
+        const response = await apiService.getBooks({
+          isFeatured: showFeatured ? true : undefined,
+          limit: 20,
+        });
 
-
-        const booksArray = Array.isArray(data) ? data : [];
-        console.log("Fetched books:", booksArray);
-        setBooks(booksArray);
+        setBooks(response.books || []);
       } catch (err) {
         setError(err instanceof Error ? err.message : "Failed to fetch books");
         console.error("Error fetching books:", err);
@@ -85,4 +86,3 @@ export function BooksSection({ title, showFeatured = false }: BooksSectionProps)
     </div>
   );
 }
-
