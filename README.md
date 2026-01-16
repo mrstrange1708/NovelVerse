@@ -124,6 +124,43 @@ Endpoint	Method	Description	Access
 	•	Fantasy & Adventure
 
 ⸻
+📥 Clone Repositories
+
+Backend
+```
+git clone https://github.com/mrstrange1708/NovelVerse-backend.git
+cd NovelVerse-backend
+```
+
+Frontend
+```
+git clone https://github.com/mrstrange1708/NovelVerse-frontend.git
+cd NovelVerse-frontend
+```
+🔐 Environment Variables
+
+⚠️ Never commit real secrets to GitHub
+Use the following examples to create your own .env files.
+
+⸻
+
+
+🌐 Frontend (.env.local)
+```
+NEXT_PUBLIC_API_BASE_URL=http://localhost:7777
+NEXT_PUBLIC_JWT_SECRET=your_jwt_secret_here
+```
+
+⚙️ Backend (.env)
+```
+PORT=7777
+DATABASE_URL=mysql://username:password@localhost:3306/novelverse_db
+JWT_SECRET=your_jwt_secret_here
+GOOGLE_CLIENT_ID=your_google_client_id
+GOOGLE_CLIENT_SECRET=your_google_client_secret
+GOOGLE_REDIRECT_URL=http://localhost:7777/auth/google/callback
+FRONTEND_URL=http://localhost:3000
+```
 
 📬 Contact - junaidsamishaik@gmail.com
 
