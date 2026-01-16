@@ -87,6 +87,7 @@ Hosting	Vercel (Frontend), Render (Backend), Aiven SQL
 📡 API Overview
 
 Endpoint	Method	Description	Access
+```
 /api/auth/signup	POST	Register a new user	Public
 /api/auth/login	POST	Authenticate user	Public
 /api/books	GET	Get all stories	Authenticated
@@ -94,7 +95,7 @@ Endpoint	Method	Description	Access
 /api/books	POST	Create story	Author only
 /api/updateBooks/:id	PUT	Update story	Author only
 /api/deleteBooks/:id	DELETE	Delete story	Author/Admin
-
+```
 
 ⸻
 
