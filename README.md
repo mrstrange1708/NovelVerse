@@ -135,7 +135,7 @@ cd NovelVerse-backend
 
 Frontend
 ```
-git clone https://github.com/mrstrange1708/NovelVerse-frontend.git
+git clone https://github.com/mrstrange1708/NovelVerse.git
 cd NovelVerse-frontend
 ```
 🔐 Environment Variables
