@@ -17,6 +17,7 @@ interface Page {
 
 interface Props {
   manifest: { pages: Page[] };
+  initialPage?: number;
   onPageChange: (p: number) => void;
 }
 
@@ -29,7 +30,7 @@ export interface PageFlipBookRef {
 }
 
 const PageFlipBook = forwardRef<PageFlipBookRef, Props>(
-  ({ manifest, onPageChange }, ref) => {
+  ({ manifest, initialPage = 1, onPageChange }, ref) => {
     interface FlipBookInstance {
       pageFlip: () => {
         flipNext: () => void;
@@ -94,7 +95,7 @@ const PageFlipBook = forwardRef<PageFlipBookRef, Props>(
             clickEventForward={true}
             swipeDistance={10}
             onFlip={handleFlip}
-            startPage={0}
+            startPage={initialPage > 1 ? initialPage - 1 : 0}
             startZIndex={0}
             mobileScrollSupport={true}
             useMouseEvents={true}

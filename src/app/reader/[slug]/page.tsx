@@ -26,8 +26,10 @@ export default function ReaderPage() {
   const [manifest, setManifest] = useState<Manifest | null>(null);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
+  const [initialPage, setInitialPage] = useState(1);
   const [isSaving, setIsSaving] = useState(false);
   const saveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const hasShownResumeToast = useRef(false);
 
 
   const stateRef = useRef({ user, book, manifest, currentPage });
@@ -49,10 +51,12 @@ export default function ReaderPage() {
       if (user && b) {
         apiService.trackBookOpen(user.id.toString(), b.id);
       }
-      if (user && b) {
+      if (user && b && !hasShownResumeToast.current) {
         const progress = await apiService.getBookProgress(b.id);
         if (progress && progress.currentPage > 1) {
           setCurrentPage(progress.currentPage);
+          setInitialPage(progress.currentPage);
+          hasShownResumeToast.current = true;
           toast.info(`Resuming from page ${progress.currentPage}`, {
             position: "top-right",
             autoClose: 2000,
@@ -169,6 +173,7 @@ export default function ReaderPage() {
       <PageFlipBook
         ref={bookFlipRef}
         manifest={manifest}
+        initialPage={initialPage}
         onPageChange={(p) => setCurrentPage(p)}
       />
 
